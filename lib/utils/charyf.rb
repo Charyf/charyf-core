@@ -20,15 +20,16 @@ module Charyf
     end
 
     def env
-      @_env ||= ENV["CHARYF_ENV"] || "development"
+      @_env ||= Charyf::StringInquirer.new(ENV["CHARYF_ENV"] || "development")
     end
 
     def env=(environment)
-      @_env = environment
+      @_env = Charyf::StringInquirer.new(environment)
     end
 
     def groups(*groups)
-
+      # TODO
+      [:default, env]
     end
 
   end

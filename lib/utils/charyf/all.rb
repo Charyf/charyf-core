@@ -1,3 +1,4 @@
+require_relative 'string_inquirer'
 require_relative 'initializable'
 require_relative 'tools'
 require_relative 'generators'

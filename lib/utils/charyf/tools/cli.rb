@@ -18,7 +18,7 @@ module Charyf
       private
 
       def load_app(ap_path)
-        require File.expand_path('config/application.rb', ap_path)
+        require File.expand_path('config/environment.rb', ap_path)
       end
 
       def validate_path(ap_path)

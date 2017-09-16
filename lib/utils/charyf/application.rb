@@ -1,9 +1,12 @@
 require_relative 'application/configuration'
+require_relative 'application/bootstrap'
 require_relative 'tools'
 
 
 module Charyf
   class Application
+
+    include Charyf::Initializable
 
     class << self
       attr_accessor :called_from
@@ -31,14 +34,17 @@ module Charyf
         Charyf::Tools.find_root_with_flag 'config.ru', from, Dir.pwd
       end
 
+      def config
+        instance.config
+      end
+
     end
 
-    def initialize!
-      # TODO
-      puts 'Initialized Charyf app!'
+    def initialize!(group: :default)
+      run_initializers(group, self)
     end
 
-    def run_load_hooks! # :nodoc:
+    def run_load_hooks!
       return self if @ran_load_hooks
       @ran_load_hooks = true
 
@@ -48,6 +54,16 @@ module Charyf
 
     def config
       @config ||= Application::Configuration.new(self.class.find_root(self.class.called_from))
+    end
+
+    def configure(&block)
+      instance_eval(&block)
+    end
+
+    protected
+
+    def initializers
+      Bootstrap.initializers_for(self)
     end
 
   end

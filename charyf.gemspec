@@ -1,7 +1,7 @@
 
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "charyf/version"
+require "utils/version"
 
 Gem::Specification.new do |spec|
   spec.name          = "charyf"
@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Richard Ludvigh"]
   spec.email         = ["richard.ludvigh@gmail.com"]
 
-  spec.summary       = %q{TODO: Write a short summary, because RubyGems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
+  spec.summary       = %q{Summary is here}
+  spec.description   = %q{Desc is here}
   spec.homepage      = "TODO: Put your gem's website or public repo URL here."
   spec.license       = "MIT"
 
@@ -23,14 +23,22 @@ Gem::Specification.new do |spec|
       "public gem pushes."
   end
 
-  spec.files         = `git ls-files -z`.split("\x0").reject do |f|
+  spec.files         = Dir['**/*'].reject do |f|
     f.match(%r{^(test|spec|features)/})
   end
+  spec.require_paths = ["lib", "templates"]
+
   spec.bindir        = "exe"
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
-  spec.require_paths = ["lib"]
 
+  # Internal dependencies
+
+  # External dependencies
+  spec.add_dependency "activerecord", "5.1.4"
+
+  # Development dependencies
   spec.add_development_dependency "bundler", "~> 1.16.a"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.0"
+  spec.add_development_dependency "pry", "~> 0.10"
 end

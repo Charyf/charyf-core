@@ -1,3 +1,5 @@
+require 'pathname'
+
 module Charyf
   module Tools
 
@@ -15,5 +17,3 @@ module Charyf
 
   end
 end
-
-require_relative 'tools/cli'

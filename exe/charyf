@@ -1,43 +1,10 @@
 #!/usr/bin/env ruby
 
-def handle_error(msg)
-  $stderr.puts msg
+require 'utils/charyf/commands'
 
-  print_help
-
+if ARGV.empty?
+  Charyf::Commands.print_help
   exit(1)
 end
 
-def print_help
-  puts ''
-  puts 'Usage: charyf [command]'
-  puts '  charyf new [name]               generate new project'
-  puts '  charyf server                   start the charyf server'
-  puts '  charyf console                  start the developer console'
-end
-
-def start_console(ap_path)
-  require 'utils/charyf/tools'
-
-  Charyf::Tools::CLI.start(ap_path)
-end
-
-command = ARGV.shift
-
-case command
-  when 'help', 'h'
-    print_help
-  when 'console', 'c'
-    start_console(Dir.pwd)
-  when 'new'
-    name = ARGV.shift
-    if name == nil
-      handle_error 'Wrong project name'
-    end
-
-    # TODO generate project
-    puts "Generating project #{name}"
-  else
-    handle_error "Unknown command '#{command}'"
-end
-
+Charyf::Commands.invoke ARGV.shift, *ARGV

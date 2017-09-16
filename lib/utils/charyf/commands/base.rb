@@ -1,0 +1,14 @@
+module Charyf
+  module Commands
+    class Base
+
+      protected
+
+      def load_app
+        # noinspection RubyResolve
+        require File.expand_path('config/environment.rb', @root)
+      end
+
+    end
+  end
+end

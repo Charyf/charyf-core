@@ -41,6 +41,9 @@ module Charyf
     end
 
     def initialize!(group: :default)
+      return self if @initialized
+      @initialized = true
+
       run_initializers(group, self)
     end
 

@@ -2,6 +2,12 @@ module Charyf
   module Commands
     class Base
 
+      def initialize(root)
+        @root = root
+
+        load_app
+      end
+
       protected
 
       def load_app

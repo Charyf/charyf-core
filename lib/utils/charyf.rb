@@ -1,4 +1,5 @@
 require_relative 'charyf/all'
+require 'fileutils'
 
 module Charyf
 
@@ -25,6 +26,13 @@ module Charyf
 
     def env=(environment)
       @_env = Charyf::StringInquirer.new(environment)
+    end
+
+    def logger
+      return @logger if @logger
+
+      FileUtils.mkdir_p root.join('log')
+      @logger = Charyf::Logger.new(Charyf.root.join('log', "#{env}.log"))
     end
 
     def groups(*groups)

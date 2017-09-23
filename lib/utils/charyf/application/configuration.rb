@@ -10,6 +10,11 @@ module Charyf
 
       end
 
+      def error_handlers
+        Charyf::ErrorHandlers
+      end
+
+
     end
   end
 end

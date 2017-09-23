@@ -5,7 +5,7 @@ module Charyf
     class Console < Charyf::Commands::Base
 
       def start
-        ::IRB.start(@root)
+        ::IRB.start(app_root)
       end
 
     end

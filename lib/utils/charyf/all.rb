@@ -1,6 +1,7 @@
 require_relative 'string_inquirer'
 require_relative 'initializable'
 require_relative 'logger'
+require_relative 'error_handler'
 require_relative 'tools'
 require_relative 'generators'
 require_relative 'application'

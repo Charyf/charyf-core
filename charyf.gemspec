@@ -10,9 +10,11 @@ Gem::Specification.new do |spec|
   spec.email         = ["richard.ludvigh@gmail.com"]
 
   spec.summary       = %q{Summary is here}
-  spec.description   = %q{Desc is here}
+  spec.description   = spec.summary
   spec.homepage      = "TODO: Put your gem's website or public repo URL here."
   spec.license       = "MIT"
+
+  spec.required_ruby_version = ">= 2.1"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.
@@ -26,7 +28,7 @@ Gem::Specification.new do |spec|
   spec.files         = Dir['**/*'].reject do |f|
     f.match(%r{^(test|spec|features)/})
   end
-  spec.require_paths = ["lib", "templates"]
+  spec.require_paths = ["lib"]
 
   spec.bindir        = "exe"
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
@@ -34,10 +36,10 @@ Gem::Specification.new do |spec|
   # Internal dependencies
 
   # External dependencies
-  spec.add_dependency "activerecord", "5.1.4"
+  spec.add_runtime_dependency "sig", "~> 1.0.1"
 
   # Development dependencies
-  spec.add_development_dependency "bundler", "~> 1.16.a"
+  spec.add_development_dependency "bundler", "~> 1.15.4"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.0"
   spec.add_development_dependency "pry", "~> 0.10"

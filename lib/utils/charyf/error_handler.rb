@@ -11,7 +11,6 @@ module Charyf
       logger.error ' - - - '
       logger.error "#{e.class}: #{e}"
       logger.error "Backtrace:\n\t#{e.backtrace.join("\n\t")}"
-      logger.error ' - - - '
 
       handlers.map { |h| h.handle_exception(e) }
 

@@ -29,6 +29,8 @@ module Charyf
         puts <<-EOM
   :help             prints this help
   :exit             quit the charyf cli
+                    alternatively use ctrl + d (EOM)  
+                                   or ctrl + c (KILL)
         EOM
       end
 
@@ -52,8 +54,13 @@ module Charyf
           return
         end
 
-        # TODO
-        cli_print utterance
+        # TODO - dependency on bad "package"
+        processor = Charyf::API::Interface::Program.new(Process.pid, Proc.new { |response| cli_print(response.text) })
+
+        request = processor.request
+        request.text = utterance
+
+        processor.process(request)
       end
 
 

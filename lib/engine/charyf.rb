@@ -8,4 +8,12 @@ require_relative 'charyf/all'
 
 module Charyf
 
+  class << self
+
+    def dispatcher
+      Charyf::Engine::Dispatcher.new
+    end
+
+  end
+
 end

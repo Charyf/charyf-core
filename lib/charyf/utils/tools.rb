@@ -3,6 +3,7 @@ require 'pathname'
 module Charyf
   module Tools
 
+    class NotImplemented < StandardError; end
     class InvalidPath < StandardError; end
 
     def self.find_root_with_flag(flag, root_path, default = nil) #:nodoc:

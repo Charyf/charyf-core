@@ -1,15 +1,11 @@
 # Dependency on utils
-require 'utils/charyf'
-# Dependency on API
-require 'api/charyf'
-
-# Require Engine files
-require_relative 'charyf/all'
+require 'charyf/utils/all'
 
 module Charyf
 
   class << self
 
+    sig [], Charyf::Engine::Dispatcher,
     def dispatcher
       Charyf::Engine::Dispatcher.new
     end

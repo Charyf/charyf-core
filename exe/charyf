@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require 'utils/charyf/commands'
+require 'charyf'
 
 if ARGV.empty?
   Charyf::Commands.print_help

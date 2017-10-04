@@ -1,9 +1,9 @@
 module Charyf
   module Commands
     class Base
-
       attr_reader :app_root
 
+      sig [Pathname], nil,
       def initialize(root)
         @app_root = root
 

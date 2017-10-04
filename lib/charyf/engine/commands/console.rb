@@ -1,4 +1,5 @@
 require 'irb'
+require_relative 'base'
 
 module Charyf
   module Commands

@@ -1,4 +1,3 @@
-require_relative 'charyf/all'
 require 'fileutils'
 
 module Charyf

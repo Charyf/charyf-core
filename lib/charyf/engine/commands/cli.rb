@@ -1,3 +1,6 @@
+require_relative 'base'
+require_relative '../interface/program'
+
 module Charyf
   module Commands
     class CLI < Charyf::Commands::Base
@@ -42,6 +45,7 @@ module Charyf
         input.strip
       end
 
+      sig [Object],
       def cli_print(obj)
         print '[Charyf] '
         puts obj
@@ -55,7 +59,7 @@ module Charyf
         end
 
         # TODO - dependency on bad "package"
-        processor = Charyf::API::Interface::Program.new(Process.pid, Proc.new { |response| cli_print(response.text) })
+        processor = Charyf::Interface::Program.new(Process.pid, Proc.new { |response| cli_print(response.text) })
 
         request = processor.request
         request.text = utterance

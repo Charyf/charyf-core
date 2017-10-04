@@ -1,3 +1,5 @@
+require_relative '../response'
+
 module Charyf
   module Controller
     class Base
@@ -17,8 +19,9 @@ module Charyf
 
       protected
 
+      sig [{text: String}], nil,
       def reply(text:)
-        response = Charyf::API::Response.new
+        response = Charyf::Engine::Response.new
 
         response.text = text
 

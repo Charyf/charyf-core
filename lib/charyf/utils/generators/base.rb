@@ -48,5 +48,3 @@ module Charyf
 
   end
 end
-
-require_relative 'generators/install'

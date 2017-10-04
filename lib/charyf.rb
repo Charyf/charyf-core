@@ -1,13 +1,13 @@
-require 'utils/version'
+require 'charyf/version'
 
-require 'sig'
+# Require dependencies on other gems
+require 'charyf/deps'
 
 # Require utils
-require 'utils/charyf'
-# Require API -> depends on utils
-require 'api/charyf'
-# Require Engine -> depends on API, Utils
-require 'engine/charyf'
+require 'charyf/utils'
+
+# Require charyf engine core
+require 'charyf/engine'
 
 module Charyf
 

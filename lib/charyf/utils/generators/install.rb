@@ -1,3 +1,5 @@
+require_relative 'base'
+
 module Charyf
   module Generators
     class Install < Charyf::Generators::Base

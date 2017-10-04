@@ -1,10 +1,11 @@
 require_relative 'context'
+require_relative 'request'
 
 module Charyf
   module Engine
     class Dispatcher
 
-      sig [Charyf::API::Request],
+      sig [Charyf::Engine::Request], nil,
       def dispatch(request)
         # Find if session exist for this request
 
@@ -17,6 +18,7 @@ module Charyf
 
       private
 
+      sig [Charyf::Engine::Context], nil,
       def spawn_controller(context)
 
 

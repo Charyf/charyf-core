@@ -1,3 +1,5 @@
+require_relative '../initializable'
+
 module Charyf
   class Application
     module Bootstrap

@@ -12,6 +12,14 @@ module Charyf
         context = Charyf::Engine::Context.new
         context.request = request
 
+        # TODO process session as well
+
+        context.session, context.intent = Charyf.application.session_processor.process(request)
+
+        unless context.intent
+          context.intent = Charyf.application.intent_processor.process(request)
+        end
+
         # TODO
         spawn_controller(context)
       end
@@ -21,13 +29,12 @@ module Charyf
       sig [Charyf::Engine::Context], nil,
       def spawn_controller(context)
 
+        intent = context.intent || Charyf::Engine::Intent::UNKNOWN
 
-        # TODO
-        controller_name = 'Charyf::Controller::Base'
-        # controller_name = 'Application' + 'Controller'
-        action_name = 'unknown'
+        controller_name = intent.controller.to_s + 'Controller'
+        action_name = intent.action
 
-        controller = Object.const_get(controller_name).new(context.request, context.intent, context.session)
+        controller = Object.const_get(controller_name).new(context.request, intent, context.session)
 
         # TODO log intent when done
         Charyf.flow_logger.info("Dispatching request [#{context.request.referer.class}" +

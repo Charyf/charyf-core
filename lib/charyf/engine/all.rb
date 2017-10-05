@@ -16,24 +16,33 @@ module Charyf
   end
 
   module Engine
+
+    class Intent
+      class DummyProcessor; end
+    end
+
+    class Session
+      class DummyProcessor; end
+    end
+
     class Context; end
     class Dispatcher; end
-    class Intent; end
     class Request; end
     class Response; end
-    class Session; end
   end
 
 end
 
+require_relative 'intent/intent'
+require_relative 'intent/processor'
 require_relative 'interface/program'
 require_relative 'controller/base'
+require_relative 'session/session'
+require_relative 'session/processor'
 
 require_relative 'charyf'
 require_relative 'commands'
 require_relative 'context'
 require_relative 'dispatcher'
-require_relative 'intent'
 require_relative 'request'
 require_relative 'response'
-require_relative 'session'

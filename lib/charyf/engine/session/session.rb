@@ -5,6 +5,7 @@ module Charyf
       attr_reader :uuid
 
       # TODO - mention it could return nil
+      # TODO sig
       def self.get(uuid)
         sessions[uuid]
       end

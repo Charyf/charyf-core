@@ -1,7 +1,7 @@
 require_relative 'application/configuration'
 require_relative 'application/bootstrap'
 require_relative 'tools'
-
+require_relative 'strategy'
 
 module Charyf
   class Application
@@ -61,6 +61,22 @@ module Charyf
 
     def configure(&block)
       instance_eval(&block)
+    end
+
+    # TODO sig, nullable
+    def speech_processor
+      klass = Charyf::Strategy.get_speech_processor config.speech_processor
+      klass ? klass.new : nil
+    end
+
+    def session_processor
+      klass = Charyf::Strategy.get_session_processor config.session_processor
+      klass ? klass.new : nil
+    end
+
+    def intent_processor
+      klass = Charyf::Strategy.get_intent_processor config.intent_processor
+      klass ? klass.new : nil
     end
 
     protected

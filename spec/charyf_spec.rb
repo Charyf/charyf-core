@@ -8,6 +8,6 @@ RSpec.describe Charyf do
   end
 
   it "sig is required" do
-    expect(require 'sig').to eq(false)
+    expect(require 'charyf_sig').to eq(false)
   end
 end

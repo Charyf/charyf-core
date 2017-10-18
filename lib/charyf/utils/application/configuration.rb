@@ -15,14 +15,14 @@ module Charyf
         Charyf::ErrorHandlers
       end
 
-      sig [], Symbol,
+      sig [], ['String'],
       def session_processor
-        @session_processor || :base
+        @session_processor || 'Dummy'
       end
 
-      sig [], Symbol,
+      sig [], ['String'],
       def intent_processor
-        @intent_processor || :base
+        @intent_processor || 'Dummy'
       end
 
     end

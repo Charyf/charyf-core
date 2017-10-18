@@ -45,7 +45,7 @@ module Charyf
         input.strip
       end
 
-      sig [Object],
+      sig ['Object'],
       def cli_print(obj)
         print '[Charyf] '
         puts obj

@@ -17,7 +17,6 @@ module Charyf
   require 'logger'
   class Logger < ::Logger; end
 
-  module Strategy; end
 
   class StringInquirer < String; end
 
@@ -35,6 +34,6 @@ require_relative 'charyf'
 require_relative 'error_handler'
 require_relative 'initializable'
 require_relative 'logger'
-require_relative 'strategy'
+require_relative 'string'
 require_relative 'string_inquirer'
 require_relative 'tools'

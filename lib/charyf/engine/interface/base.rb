@@ -7,12 +7,12 @@ module Charyf
   module Interface
     class Base
 
-      sig [], Charyf::Engine::Dispatcher,
+      sig [], 'Charyf::Engine::Dispatcher',
       def dispatcher
         Charyf.dispatcher
       end
 
-      sig [Charyf::Engine::Response], nil,
+      sig ['Charyf::Engine::Response'], nil,
       def reply(response)
         raise Charyf::Tools::NotImplemented.new
       end

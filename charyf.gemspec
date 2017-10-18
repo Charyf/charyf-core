@@ -35,7 +35,7 @@ Gem::Specification.new do |spec|
   # Internal dependencies
 
   # External dependencies
-  spec.add_runtime_dependency 'sig', '~> 1.0.1'
+  spec.add_runtime_dependency 'charyf_sig', '~> 1.1.2'
 
   # Development dependencies
   spec.add_development_dependency 'bundler', '~> 1.15.4'

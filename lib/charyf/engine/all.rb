@@ -1,44 +1,21 @@
-# Module hierarchy
-module Charyf
-  module Commands
-    class Base; end
-    class CLI < Base; end
-    class Console < Base; end
-  end
+require_relative 'commands/base'
+require_relative 'commands/cli'
+require_relative 'commands/console'
 
-  module Controller
-    class Base; end
-  end
-
-  module Interface
-    class Base; end
-    class Program < Base; end
-  end
-
-  module Engine
-
-    class Intent
-      class DummyProcessor; end
-    end
-
-    class Session
-      class DummyProcessor; end
-    end
-
-    class Context; end
-    class Dispatcher; end
-    class Request; end
-    class Response; end
-  end
-
-end
+require_relative 'controller/base'
 
 require_relative 'intent/intent'
-require_relative 'intent/processor'
+require_relative 'intent/processors/base'
+require_relative 'intent/processors/dummy'
+
+require_relative 'interface/base'
 require_relative 'interface/program'
-require_relative 'controller/base'
+
 require_relative 'session/session'
-require_relative 'session/processor'
+require_relative 'session/processors/base'
+require_relative 'session/processors/dummy'
+
+require_relative 'skill/base'
 
 require_relative 'charyf'
 require_relative 'commands'

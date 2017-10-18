@@ -5,7 +5,7 @@ module Charyf
   module Engine
     class Dispatcher
 
-      sig [Charyf::Engine::Request], nil,
+      sig ['Charyf::Engine::Request'], nil,
       def dispatch(request)
         # Find if session exist for this request
 
@@ -14,11 +14,9 @@ module Charyf
 
         # TODO process session as well
 
-        context.session, context.intent = Charyf.application.session_processor.process(request)
+        context.session = Charyf.application.session_processor.process(request)
 
-        unless context.intent
-          context.intent = Charyf.application.intent_processor.process(request)
-        end
+        context.intent = Charyf.application.intent_processor.process(request, context.session ? context.session.skill : nil)
 
         # TODO
         spawn_controller(context)
@@ -26,12 +24,12 @@ module Charyf
 
       private
 
-      sig [Charyf::Engine::Context], nil,
+      sig ['Charyf::Engine::Context'], nil,
       def spawn_controller(context)
 
         intent = context.intent || Charyf::Engine::Intent::UNKNOWN
 
-        controller_name = intent.controller.to_s + 'Controller'
+        controller_name = intent.controller + 'Controller'
         action_name = intent.action
 
         controller = Object.const_get(controller_name).new(context.request, intent, context.session)

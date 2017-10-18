@@ -2,7 +2,31 @@ require_relative '../initializable'
 
 module Charyf
   class Application
+    # noinspection RubyResolve
     module Bootstrap
+
+      class SkillLoadError < StandardError
+        def initialize(e, skill_name, skill_path)
+          super(e)
+
+          @_name = skill_name
+          @_path = skill_path.dirname
+        end
+
+        def message
+          _message + super
+        end
+
+        def _message
+          <<-EOS
+          
+          Unable to load skill #{@_name}
+          Expected to find: '#{@_name}.rb'
+                Located at: '#{@_path}'
+
+EOS
+        end
+      end
 
       include Charyf::Initializable
 
@@ -12,20 +36,46 @@ module Charyf
         Charyf.logger.info "Charyf starting in #{Charyf.env} mode."
 
 
-        # noinspection RubyResolve
         require self.config.root.join('config', 'environments', "#{Charyf.env}.rb")
       end
 
       initializer :validate_strategies, group: :all do
-        raise InitializationError.new('No strategy for session processor found') unless Charyf.application.session_processor
-        raise InitializationError.new('No strategy for intent processor found') unless Charyf.application.intent_processor
+        raise InitializationError.new('No session processor found') unless Charyf.application.session_processor
+        raise InitializationError.new('No intent processor found') unless Charyf.application.intent_processor
       end
 
-      initializer :load_apps, group: :all do
-        # noinspection RubyResolve
+      initializer :load_defaults, group: :all do
         require self.config.root.join('app', 'application_controller.rb')
 
-        # TODO Load apps / skills
+      end
+
+      initializer :list_skills, group: :all do
+        skills = Dir.entries(self.config.root.join('app', 'skills'))
+                     .select {|entry| File.directory? self.config.root.join('app', 'skills', entry) and !(entry =='.' || entry == '..') }
+
+        skills.each do |skill_name|
+          skill_path = self.config.root.join('app', 'skills', skill_name, "#{skill_name}.rb")
+
+          begin
+            require skill_path.to_s
+          rescue LoadError => e
+            raise SkillLoadError.new(e, skill_name, skill_path)
+          end
+        end
+      end
+
+      initializer :load_skills, group: :all do
+
+        Charyf::Skill.list.each do |skill_klass|
+
+          # Load controllers
+          root = skill_klass.skill_root
+
+          Dir[root.join('controllers', '**', '**.rb')].each do |controller|
+            require controller
+          end
+
+        end
       end
 
       initializer :load_initializers, group: :all do

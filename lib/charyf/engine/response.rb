@@ -4,14 +4,16 @@ module Charyf
 
       attr_accessor :text
 
-      sig [String], String,
+      # Attr methods for type-checking
+
+      sig ['String'], 'String',
       def text=(text)
-        @_text = text
+        @text = text
       end
 
-      sig [], String,
+      sig [], 'String',
       def text
-        @_text
+        @text
       end
 
     end

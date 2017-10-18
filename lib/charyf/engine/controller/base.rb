@@ -19,11 +19,11 @@ module Charyf
 
       protected
 
-      sig [{text: String}], nil,
-      def reply(text:)
+      sig [{text: ['String','NilClass'], render: ['Symbol', 'String', 'NilClass']}], nil,
+      def reply(text: nil, render: nil)
         response = Charyf::Engine::Response.new
 
-        response.text = text
+        response.text = text || "" # TODO
 
         Charyf.flow_logger.info("Replying on request [#{request.referer.class}" +
                                     "|#{request.conversation_id}" +

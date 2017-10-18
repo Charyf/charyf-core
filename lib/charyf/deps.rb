@@ -1,5 +1,5 @@
 if %w(development test).include?((ENV['CHARYF_ENV'] || 'development').downcase) || ENV['ENABLE_SIG']
-  require 'sig'
+  require 'charyf_sig'
   else
-  require 'sig/none'
+  require 'charyf_sig/none'
 end

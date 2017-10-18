@@ -6,7 +6,7 @@ module Charyf
 
     extend self
 
-    sig [String, Array], nil,
+    sig ['String', 'Array'], nil,
     def invoke(command, *args)
       case command
         when 'help', 'h'
@@ -32,12 +32,12 @@ module Charyf
 
     private
 
-    sig [], Pathname,
+    sig [], 'Pathname',
     def app_root
       Charyf::Tools.find_root_with_flag 'config.ru', Dir.pwd
     end
 
-    sig [String], nil,
+    sig ['String'], nil,
     def handle_error(msg)
       $stderr.puts msg
 

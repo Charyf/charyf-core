@@ -1,23 +1,21 @@
-require_relative ''
-
 module Charyf
   module Engine
     class Request
 
       attr_accessor :text
 
-      sig [Charyf::Interface::Base, String], nil,
+      sig ['Charyf::Interface::Base', 'String'], nil,
       def initialize(referer, conversation_id)
         @referer = referer
         @conversation_id = conversation_id
       end
 
-      sig [], Charyf::Interface::Base,
+      sig [], 'Charyf::Interface::Base',
       def referer
         @referer
       end
 
-      sig [], String,
+      sig [], 'String',
       def conversation_id
         @conversation_id
       end

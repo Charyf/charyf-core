@@ -2,7 +2,7 @@ module Charyf
   module Engine
     class Session
 
-      attr_reader :uuid
+      attr_reader :uuid, :skill
 
       # TODO - mention it could return nil
       # TODO sig
@@ -10,12 +10,8 @@ module Charyf
         sessions[uuid]
       end
 
-      def self.init(uuid)
-        sessions[uuid] = new(uuid)
-      end
-
-      def initialize(uuid)
-        @uuid = uuid
+      def self.init(uuid, skill)
+        sessions[uuid] = new(uuid, skill)
       end
 
       def storage
@@ -23,6 +19,11 @@ module Charyf
       end
 
       private
+
+      def initialize(uuid, skill)
+        @uuid = uuid
+        @skill = skill
+      end
 
       def self.sessions
         @_sessions ||= Hash.new

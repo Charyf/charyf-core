@@ -3,14 +3,19 @@ module Charyf
     class Base
 
       class << self
-        attr_accessor :_file_path, :_subclasses
+        attr_accessor :_file_path
 
         def inherited(subclass)
-          (@_subclasses ||= []) << subclass
+          Base._subclasses[subclass.name.demodulize] = subclass
 
           # TODO this should be tested
           subclass._file_path = Pathname.new(caller.first[/^[^:]+/]).dirname
         end
+
+        def _subclasses
+          @_subclasses ||= Hash.new
+        end
+
       end
 
       def self.skill_root
@@ -21,7 +26,7 @@ module Charyf
     end
 
     def self.list
-      Base._subclasses
+      Base._subclasses.values
     end
 
   end

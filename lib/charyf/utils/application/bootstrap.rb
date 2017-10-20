@@ -1,4 +1,5 @@
 require_relative '../initializable'
+require 'i18n'
 
 module Charyf
   class Application
@@ -37,6 +38,10 @@ EOS
 
 
         require self.config.root.join('config', 'environments', "#{Charyf.env}.rb")
+      end
+
+      initializer :load_i18n, group: :all do
+        I18n.load_path << Dir[Charyf._gem_source.join('locale', '**', '*.yml').to_s]
       end
 
       initializer :validate_strategies, group: :all do

@@ -11,6 +11,10 @@ module Charyf
 
       end
 
+      def i18n
+        I18n
+      end
+
       def error_handlers
         Charyf::ErrorHandlers
       end

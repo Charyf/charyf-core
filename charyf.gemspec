@@ -33,9 +33,10 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
 
   # Internal dependencies
+  spec.add_runtime_dependency 'charyf_sig', '~> 1.1.2'
 
   # External dependencies
-  spec.add_runtime_dependency 'charyf_sig', '~> 1.1.2'
+  spec.add_runtime_dependency 'i18n', '~> 0.9'
 
   # Development dependencies
   spec.add_development_dependency 'bundler', '~> 1.15.4'

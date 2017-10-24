@@ -1,8 +1,11 @@
 require_relative '../response'
+require_relative 'renderers'
 
 module Charyf
   module Controller
     class Base
+
+      include Renderers
 
       attr_reader :request, :intent, :session
 
@@ -24,6 +27,8 @@ module Charyf
         response = Charyf::Engine::Response.new
 
         response.text = text || "" # TODO
+
+        binding.pry
 
         Charyf.flow_logger.info("Replying on request [#{request.referer.class}" +
                                     "|#{request.conversation_id}" +

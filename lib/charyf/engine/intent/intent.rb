@@ -37,6 +37,11 @@ module Charyf
         @_alternatives
       end
 
+      sig [], ['String', 'Symbol'],
+      def skill
+        @_skill
+      end
+
       UNKNOWN = Intent.new(nil, :Application, :unknown, 100)
 
     end

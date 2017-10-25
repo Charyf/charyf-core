@@ -5,10 +5,12 @@ module Charyf
     module Renderers
 
       class ResponseFileMissingError < StandardError; end
+      class NoResponseFound < StandardError; end
+      class InvalidState < StandardError; end
 
       # TODO sig
       def response_folder
-        return nil if @intent.skill == nil || @intent.skill.empty?
+        return nil if @intent.skill.blank?
 
         return @intent.skill.constantize.skill_root.join('responses', controller_path)
       end
@@ -22,25 +24,32 @@ module Charyf
       def render_text_response(action)
         file_path = response_folder.join("#{action}.txt.erb")
 
-        check_file!(file_path)
+        return nil unless exists?(file_path)
 
-        sample = File.read(file_path).split("###").map(&:strip).sample
-
-        ERB.new(sample).result(binding)
+        _render_sample_response file_path
       end
 
       # TODO sig
       def render_html_response(action)
         file_path = response_folder.join("#{action}.html.erb")
 
-        check_file!(file_path)
+        return nil unless exists?(file_path)
 
-        sample = File.read(file_path)
-
-        ERB.new(sample).result(binding)
+        _render_response file_path
       end
 
       private
+
+      def _render_sample_response(file)
+        sample = File.read(file).split("###").map(&:strip).sample
+        ERB.new(sample).result(binding)
+      end
+
+      def _render_response(file)
+        sample = File.read(file)
+        ERB.new(sample).result(binding)
+      end
+
 
       # TODO sig
       def controller_path
@@ -48,12 +57,12 @@ module Charyf
       end
 
       # TODO sig
-      def check_file(path)
+      def exists?(path)
         File.exists?(path)
       end
 
-      def check_file!(path)
-        raise ResponseFileMissingError.new(path) unless check_file(path)
+      def exists!(path)
+        raise ResponseFileMissingError.new(path) unless exists?(path)
       end
 
     end

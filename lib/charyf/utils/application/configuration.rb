@@ -21,12 +21,12 @@ module Charyf
 
       sig [], ['String'],
       def session_processor
-        @session_processor || 'Dummy'
+        (@session_processor || 'dummy').to_s
       end
 
       sig [], ['String'],
       def intent_processor
-        @intent_processor || 'Dummy'
+        (@intent_processor || 'dummy').to_s
       end
 
     end

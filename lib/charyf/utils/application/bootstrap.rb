@@ -76,8 +76,23 @@ EOS
           # Load controllers
           root = skill_klass.skill_root
 
-          Dir[root.join('controllers', '**', '**.rb')].each do |controller|
+          Dir[root.join('controllers', '**', '*.rb')].each do |controller|
             require controller
+          end
+
+        end
+      end
+
+      initializer :load_skill_intents, group: :all do
+        file_pattern = "*.#{Charyf.application.config.intent_processor.to_s}.rb"
+
+        Charyf::Skill.list.each do |skill_klass|
+
+          # Load routing
+          root = skill_klass.skill_root
+
+          Dir[root.join('intents', '**', file_pattern)].each do |routing|
+            require routing
           end
 
         end

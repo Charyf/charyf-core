@@ -9,7 +9,7 @@ module Charyf
           class << self
 
             def inherited(subclass)
-              Base._subclasses[subclass.name.demodulize] = subclass
+              Base._subclasses[subclass.name.demodulize.underscore] = subclass
             end
 
             def _subclasses

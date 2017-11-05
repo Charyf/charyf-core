@@ -7,7 +7,7 @@ module Charyf
       module Processors
         class Dummy < Base
 
-        def process(request, skill = nil)
+        def determine(request, skill = nil)
 
             #TODO remove
             if request.text =~ /foo/
@@ -19,7 +19,7 @@ module Charyf
             # TODO TILL HERE
 
 
-            Charyf::Engine::Intent::UNKNOWN
+            unknown
           end
 
         end

@@ -16,7 +16,10 @@ module Charyf
 
         context.session = Charyf.application.session_processor.process(request)
 
-        context.intent = Charyf.application.intent_processor.process(request, context.session ? context.session.skill : nil)
+        context.intent = Charyf.application.intent_processor.determine(
+            request,
+            context.session ? context.session.skill : nil
+        )
 
         # TODO
         spawn_controller(context)

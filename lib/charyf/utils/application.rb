@@ -65,13 +65,13 @@ module Charyf
     # TODO sig, nullable
     def session_processor
       # TODO resolve dependency on engine - maybe move the base classes to utils?
-      klass = Charyf::Engine::Session::Processors.list[config.session_processor]
+      klass = Charyf::Engine::Session::Processors.list[config.session_processor.underscore]
       klass ? klass.new : nil
     end
 
     def intent_processor
       # TODO resolve dependency on engine - maybe move the base classes to utils?
-      klass = Charyf::Engine::Intent::Processors.list[config.intent_processor]
+      klass = Charyf::Engine::Intent::Processors.list[config.intent_processor.underscore]
       klass ? klass.new : nil
     end
 

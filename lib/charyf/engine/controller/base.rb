@@ -24,7 +24,11 @@ module Charyf
       protected
 
       sig [{text: ['String','NilClass'], render: ['Symbol', 'String', 'NilClass']}], nil,
-      def reply(text: nil, html: nil, render: nil)
+      def reply(
+          text: nil,
+          html: nil,
+          render: nil
+      )
 
 
         if text.blank? && html.blank?

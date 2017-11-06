@@ -2,7 +2,7 @@ module Charyf
   module Engine
     class Intent
 
-      sig [['Symbol', 'String', 'NilClass'], ['Symbol', 'String'], ['Symbol', 'String'], 'Numeric', 'Array'], nil,
+      sig [['Symbol', 'String', 'NilClass'], ['Symbol', 'String'], ['Symbol', 'String'], 'Numeric', 'Hash'], nil,
       def initialize(skill, controller, action, confidence, matches = Hash.new)
         @_skill = skill.to_s
         @_controller = controller.to_s

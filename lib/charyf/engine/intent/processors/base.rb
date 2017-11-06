@@ -18,7 +18,11 @@ module Charyf
             end
 
             def scoped_name(skill, *args)
-              ([skill.to_s.underscore] + args).join('_')
+              ([skill.to_s] + args).join('_')
+            end
+
+            def unscope_name(skill, name)
+              name.start_with?(skill.to_s) ? name.sub("#{skill.to_s}_", '') : name
             end
 
           end

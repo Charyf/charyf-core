@@ -69,10 +69,13 @@ module Charyf
       klass ? klass.new : nil
     end
 
-    def intent_processor
+    def intent_processors
       # TODO resolve dependency on engine - maybe move the base classes to utils?
-      klass = Charyf::Engine::Intent::Processors.list[config.intent_processor.underscore]
-      klass ? klass.new : nil
+      config.enabled_intent_processors.map do |processor_name|
+        klass = Charyf::Engine::Intent::Processors.list[processor_name]
+        klass ? klass.new : nil
+      end
+
     end
 
     protected

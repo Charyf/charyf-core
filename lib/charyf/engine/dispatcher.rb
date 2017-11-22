@@ -16,7 +16,7 @@ module Charyf
 
         context.session = Charyf.application.session_processor.process(request)
 
-        context.intent = Charyf.application.intent_processor.determine(
+        context.intent = intent_processor.determine(
             request,
             context.session ? context.session.skill : nil
         )
@@ -26,6 +26,10 @@ module Charyf
       end
 
       private
+
+      def intent_processor
+        Charyf.application.intent_processors.first
+      end
 
       sig ['Charyf::Engine::Context'], nil,
       def spawn_controller(context)

@@ -3,7 +3,8 @@ module Charyf
     class Configuration
 
       attr_reader :root
-      attr_accessor :session_processor, :intent_processor, :speech_processor
+      attr_accessor :session_processor
+      attr_accessor :enabled_intent_processors
 
       def initialize(root)
 
@@ -24,9 +25,9 @@ module Charyf
         (@session_processor || 'dummy').to_s
       end
 
-      sig [], ['String'],
-      def intent_processor
-        (@intent_processor || 'dummy').to_s
+      sig [], [Array],
+      def enabled_intent_processors
+        (@enabled_intent_processors || []).map(&:to_sym)
       end
 
     end

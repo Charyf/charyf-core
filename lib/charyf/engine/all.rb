@@ -4,6 +4,8 @@ require_relative 'commands/console'
 
 require_relative 'controller/base'
 
+require_relative 'dispatcher/base'
+
 require_relative 'intent/intent'
 require_relative 'intent/processors/base'
 require_relative 'intent/processors/dummy'
@@ -20,6 +22,5 @@ require_relative 'skill/base'
 require_relative 'charyf'
 require_relative 'commands'
 require_relative 'context'
-require_relative 'dispatcher'
 require_relative 'request'
 require_relative 'response'

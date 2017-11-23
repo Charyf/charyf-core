@@ -6,16 +6,9 @@ module Charyf
       module Processors
         class Base
 
-          class << self
-
-            def inherited(subclass)
-              Base._subclasses[subclass.name.demodulize.underscore] = subclass
-            end
-
-            def _subclasses
-              @_subclasses ||= Hash.new
-            end
-
+          include Charyf::Strategy
+          def self.base
+            Base
           end
 
 
@@ -27,8 +20,12 @@ module Charyf
         end
 
 
+        def self.known
+          Base.known
+        end
+
         def self.list
-          Base._subclasses
+          Base.list
         end
 
       end

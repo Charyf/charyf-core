@@ -65,7 +65,7 @@ module Charyf
     # TODO sig, nullable
     def session_processor
       # TODO resolve dependency on engine - maybe move the base classes to utils?
-      klass = Charyf::Engine::Session::Processors.list[config.session_processor.underscore]
+      klass = Charyf::Engine::Session::Processors.list[config.session_processor]
       klass ? klass.new : nil
     end
 
@@ -76,6 +76,12 @@ module Charyf
         klass ? klass.new : nil
       end
 
+    end
+
+    def dispatcher
+      # TODO resolve dependency on engine - maybe move the base classes to utils?
+      klass = Charyf::Engine::Dispatcher.list[config.dispatcher]
+      klass ? klass.new : nil
     end
 
     protected

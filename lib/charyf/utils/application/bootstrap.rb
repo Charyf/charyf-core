@@ -55,7 +55,8 @@ EOS
       # Validates that all required strategies are fulfilled and the application can load
       #
       initializer :validate_strategies, group: :all do
-        raise InitializationError.new('No session processor found') unless Charyf.application.session_processor
+        raise InitializationError.new("No session processor found for #{Charyf.application.config.session_processor}") unless Charyf.application.session_processor
+        raise InitializationError.new("No dispatcher found for #{Charyf.application.config.dispatcher}") unless Charyf.application.dispatcher
 
         intent_processors = Charyf.application.intent_processors
         if intent_processors.empty? || intent_processors.include?(nil)

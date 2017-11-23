@@ -7,6 +7,8 @@ module Charyf
       module Processors
         class Dummy < Base
 
+          strategy_name :dummy
+
           def process(request)
             nil
           end

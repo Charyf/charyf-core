@@ -3,7 +3,7 @@ module Charyf
     class Configuration
 
       attr_reader :root
-      attr_accessor :session_processor
+      attr_accessor :session_processor, :dispatcher
       attr_accessor :enabled_intent_processors
 
       def initialize(root)
@@ -20,9 +20,14 @@ module Charyf
         Charyf::ErrorHandlers
       end
 
-      sig [], ['String'],
+      sig [], ['Symbol', 'NilClass'],
+      def dispatcher
+        @dispatcher ? @dispatcher.to_sym : nil
+      end
+
+      sig [], ['Symbol'],
       def session_processor
-        (@session_processor || 'dummy').to_s
+        (@session_processor || 'dummy').to_sym
       end
 
       sig [], [Array],

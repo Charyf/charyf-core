@@ -7,7 +7,7 @@ module Charyf
       module Processors
         class Dummy < Base
 
-          processor_name :dummy
+          strategy_name :dummy
           definition_extension :dummy
 
           def determine(request, skill = nil)

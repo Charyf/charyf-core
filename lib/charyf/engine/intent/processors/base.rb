@@ -7,6 +7,11 @@ module Charyf
       module Processors
         class Base
 
+          include Charyf::Strategy
+          def self.base
+            Base
+          end
+
 
           sig ['Charyf::Engine::Request', ['String', 'Symbol', 'NilClass']], 'Charyf::Engine::Intent',
               def determine(request, skill = nil)
@@ -23,24 +28,7 @@ module Charyf
               require_definitions
           end
 
-
-
-
-
           class << self
-
-            def inherited(subclass)
-              Base._subclasses << subclass
-            end
-
-            def processor_name(name = nil)
-              if name
-                @_processor_name = name
-                Base._aliases[name] = self
-              end
-
-              @_processor_name
-            end
 
             def definition_extension(file_extension = nil)
               if name
@@ -48,14 +36,6 @@ module Charyf
               end
 
               @_definition_extension || self.name.demodulize.underscore
-            end
-
-            def _subclasses
-              @_subclasses ||= []
-            end
-
-            def _aliases
-              @_aliases ||= Hash.new
             end
 
             def scoped_name(skill, *args)
@@ -86,11 +66,11 @@ module Charyf
         end
 
         def self.known
-          Base._subclasses
+          Base.known
         end
 
         def self.list
-          Base._aliases
+          Base.list
         end
 
       end

@@ -2,6 +2,8 @@ module Charyf
   module Engine
     class Intent
 
+      attr_writer :alternatives
+
       sig [['Symbol', 'String', 'NilClass'], ['Symbol', 'String'], ['Symbol', 'String'], 'Numeric', 'Hash'], nil,
       def initialize(skill, controller, action, confidence, matches = Hash.new)
         @_skill = skill.to_s
@@ -42,7 +44,7 @@ module Charyf
         @_skill
       end
 
-      UNKNOWN = Intent.new(nil, :Application, :unknown, 100)
+      UNKNOWN = Intent.new(nil, :Application, :unknown, 0)
 
     end
   end

@@ -14,7 +14,7 @@ module Charyf
 
           sig ['Charyf::Engine::Request'], ['Charyf::Engine::Session', 'NilClass'],
           def process(request)
-            raise Charyf::Tools::NotImplemented.new
+            raise Charyf::Utils::NotImplemented.new
           end
 
         end

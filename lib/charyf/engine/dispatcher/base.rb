@@ -23,11 +23,13 @@ module Charyf
         protected
 
         def self.intent_processors
-          Charyf.application.intent_processors
+          Charyf.application.intent_processors.map do |processor_klass|
+            processor_klass.new
+          end
         end
 
         def self.session_processor
-          Charyf.application.session_processor
+          Charyf.application.session_processor.new
         end
 
         def intent_processors

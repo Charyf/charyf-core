@@ -9,12 +9,12 @@ module Charyf
 
       sig [], 'Charyf::Engine::Dispatcher::Base',
       def dispatcher
-        Charyf.application.dispatcher
+        Charyf.application.dispatcher.new
       end
 
       sig ['Charyf::Engine::Response'], nil,
       def reply(response)
-        raise Charyf::Tools::NotImplemented.new
+        raise Charyf::Utils::NotImplemented.new
       end
 
     end

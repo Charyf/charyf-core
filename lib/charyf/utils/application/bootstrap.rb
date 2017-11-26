@@ -55,13 +55,9 @@ EOS
       # Validates that all required strategies are fulfilled and the application can load
       #
       initializer :validate_strategies, group: :all do
-        raise InitializationError.new("No session processor found for #{Charyf.application.config.session_processor}") unless Charyf.application.session_processor
-        raise InitializationError.new("No dispatcher found for #{Charyf.application.config.dispatcher}") unless Charyf.application.dispatcher
-
-        intent_processors = Charyf.application.intent_processors
-        if intent_processors.empty? || intent_processors.include?(nil)
-          raise InitializationError.new("Invalid set of intent processors #{Charyf.application.config.enabled_intent_processors}")
-        end
+        Charyf.application.session_processor
+        Charyf.application.intent_processors
+        Charyf.application.dispatcher
       end
 
       #
@@ -102,7 +98,7 @@ EOS
       #
       initializer :init_intent_parsers, group: :all do
         Charyf.application.intent_processors.each do |parser|
-          parser.class.setup
+          parser.setup
         end
         # Charyf.
         #

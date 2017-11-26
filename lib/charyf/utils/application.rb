@@ -1,6 +1,6 @@
 require_relative 'application/configuration'
 require_relative 'application/bootstrap'
-require_relative 'tools'
+require_relative 'utils'
 
 module Charyf
   class Application
@@ -30,7 +30,7 @@ module Charyf
       end
 
       def find_root(from)
-        Charyf::Tools.find_root_with_flag 'config.ru', from, Dir.pwd
+        Charyf::Utils.find_root_with_flag 'config.ru', from, Dir.pwd
       end
 
       def config
@@ -66,22 +66,48 @@ module Charyf
     def session_processor
       # TODO resolve dependency on engine - maybe move the base classes to utils?
       klass = Charyf::Engine::Session::Processors.list[config.session_processor]
-      klass ? klass.new : nil
+      raise Charyf::Utils::InvalidConfiguration.new("No storage processor strategy found with name '#{config.session_processor}'") unless klass
+
+      klass
     end
 
     def intent_processors
       # TODO resolve dependency on engine - maybe move the base classes to utils?
-      config.enabled_intent_processors.map do |processor_name|
+      klasses = config.enabled_intent_processors.map do |processor_name|
         klass = Charyf::Engine::Intent::Processors.list[processor_name]
-        klass ? klass.new : nil
+        raise Charyf::Utils::InvalidConfiguration.new("No intent processor strategy found with name '#{processor_name}'") unless klass
+
+        klass
       end
 
+      raise Charyf::Utils::InvalidConfiguration.new('No intent processor strategies specified') if klasses.empty?
+
+      klasses
     end
 
     def dispatcher
       # TODO resolve dependency on engine - maybe move the base classes to utils?
       klass = Charyf::Engine::Dispatcher.list[config.dispatcher]
-      klass ? klass.new : nil
+      raise Charyf::Utils::InvalidConfiguration.new("No dispatcher found with name '#{config.dispatcher}'") unless klass
+
+      klass
+    end
+
+    # TODO sig, nullable
+    def storage_provider
+      Charyf::Utils::StorageProvider.list[config.storage_provider]
+
+      klass = Charyf::Utils::Parser.get(config.i18n.locale)
+      raise Charyf::Utils::InvalidConfiguration.new("No parser found for locale '#{config.i18n.locale}'") unless klass
+
+      klass
+    end
+
+    def parser
+      klass = Charyf::Utils::Parser.get(config.i18n.locale)
+      raise Charyf::Utils::InvalidConfiguration.new("No parser found for locale '#{config.i18n.locale}'") unless klass
+
+      klass
     end
 
     protected

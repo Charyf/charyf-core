@@ -26,7 +26,7 @@ module Charyf
         else
           handle_error "Unknown command '#{command}'"
       end
-    rescue Charyf::Tools::InvalidPath
+    rescue Charyf::Utils::InvalidPath
       handle_error 'Not a charyf application'
     end
 
@@ -34,7 +34,7 @@ module Charyf
 
     sig [], 'Pathname',
     def app_root
-      Charyf::Tools.find_root_with_flag 'config.ru', Dir.pwd
+      Charyf::Utils.find_root_with_flag 'config.ru', Dir.pwd
     end
 
     sig ['String'], nil,

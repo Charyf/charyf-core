@@ -7,6 +7,8 @@ module Charyf
       # English string normalization
       class English < Base
 
+        strategy_name :en
+
         CONTRACTION = ["ain't", "aren't", "can't", "could've", "couldn't",
                        "didn't", "doesn't", "don't", "gonna", "gotta",
                        "hadn't", "hasn't", "haven't", "he'd", "he'll", "he's",
@@ -25,7 +27,7 @@ module Charyf
                        "who's", "who've", "why'd", "why're", "why's", "won't",
                        "won't've", "would've", "wouldn't", "wouldn't've",
                        "y'all", "ya'll", "you'd", "you'd've", "you'll",
-                       "y'aint", "y'ain't", "you're", "you've"]
+                       "y'aint", "y'ain't", "you're", "you've"].map(&:downcase).freeze
 
         EXPANSION = ["is not", "are not", "can not", "could have",
                      "could not", "did not", "does not", "do not",
@@ -50,16 +52,16 @@ module Charyf
                      "will not", "will not have", "would have",
                      "would not", "would not have", "you all", "you all",
                      "you would", "you would have", "you will",
-                     "you are not", "you are not", "you are", "you have"]
+                     "you are not", "you are not", "you are", "you have"].map(&:downcase).freeze
 
         TEXT_NUMBERS = ["zero", "one", "two", "three", "four", "five", "six",
                        "seven", "eight", "nine", "ten", "eleven", "twelve",
                        "thirteen", "fourteen", "fifteen", "sixteen",
-                       "seventeen", "eighteen", "nineteen", "twenty"]
+                       "seventeen", "eighteen", "nineteen", "twenty"].map(&:downcase).freeze
 
-        ARTICLES = ["the", "a", "an"]
+        ARTICLES = ["the", "a", "an"].map(&:downcase).freeze
 
-        def self.normalize(text, remove_articles =  true)
+        def self.normalize(text, remove_articles: true)
           words = text.split
 
           normalized = ''

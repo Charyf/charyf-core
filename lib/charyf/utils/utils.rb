@@ -1,10 +1,11 @@
 require 'pathname'
 
 module Charyf
-  module Tools
+  module Utils
 
     class NotImplemented < StandardError; end
     class InvalidPath < StandardError; end
+    class InvalidConfiguration < StandardError; end
 
     def self.find_root_with_flag(flag, root_path, default = nil) #:nodoc:
       while root_path && File.directory?(root_path) && !File.exist?("#{root_path}/#{flag}")

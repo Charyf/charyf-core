@@ -36,7 +36,7 @@ module Charyf
       end
 
       def base
-        raise Charyf::Tools::NotImplemented.new("No base class found for #{self}")
+        raise Charyf::Utils::NotImplemented.new("No base class found for #{self}")
       end
     end
 

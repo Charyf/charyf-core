@@ -15,7 +15,7 @@ module Charyf
 
           sig ['Charyf::Engine::Request', ['String', 'Symbol', 'NilClass']], 'Charyf::Engine::Intent',
               def determine(request, skill = nil)
-                raise Charyf::Tools::NotImplemented.new
+                raise Charyf::Utils::NotImplemented.new
               end
 
           sig [], 'Charyf::Engine::Intent',
@@ -35,7 +35,7 @@ module Charyf
                 @_definition_extension = file_extension
               end
 
-              @_definition_extension || self.name.demodulize.underscore
+              @_definition_extension || strategy_name
             end
 
             def scoped_name(skill, *args)

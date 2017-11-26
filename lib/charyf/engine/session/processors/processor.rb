@@ -3,7 +3,7 @@ require 'charyf/utils'
 module Charyf
   module Engine
     class Session
-      module Processors
+      module Processor
         class Base
 
           include Charyf::Strategy

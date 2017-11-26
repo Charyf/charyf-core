@@ -1,4 +1,4 @@
-require_relative 'base'
+require_relative 'parser'
 
 module Charyf
   module Utils

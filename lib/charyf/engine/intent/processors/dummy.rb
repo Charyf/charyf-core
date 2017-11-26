@@ -1,10 +1,11 @@
 require 'charyf/utils'
 require_relative '../intent'
+require_relative 'processor'
 
 module Charyf
   module Engine
     class Intent
-      module Processors
+      module Processor
         class Dummy < Base
 
           strategy_name :dummy

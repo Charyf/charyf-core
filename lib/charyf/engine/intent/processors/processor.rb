@@ -4,7 +4,7 @@ require_relative '../intent'
 module Charyf
   module Engine
     class Intent
-      module Processors
+      module Processor
         class Base
 
           include Charyf::Strategy

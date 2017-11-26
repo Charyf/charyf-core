@@ -1,7 +1,7 @@
-require_relative 'generators/base'
+require_relative 'generators/generator'
 require_relative 'generators/install'
 
-require_relative 'parser/base'
+require_relative 'parser/parser'
 require_relative 'parser/en_parser'
 
 require_relative 'storage/provider'

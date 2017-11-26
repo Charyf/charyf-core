@@ -65,7 +65,7 @@ module Charyf
     # TODO sig, nullable
     def session_processor
       # TODO resolve dependency on engine - maybe move the base classes to utils?
-      klass = Charyf::Engine::Session::Processors.list[config.session_processor]
+      klass = Charyf::Engine::Session::Processor.list[config.session_processor]
       raise Charyf::Utils::InvalidConfiguration.new("No storage processor strategy found with name '#{config.session_processor}'") unless klass
 
       klass
@@ -74,7 +74,7 @@ module Charyf
     def intent_processors
       # TODO resolve dependency on engine - maybe move the base classes to utils?
       klasses = config.enabled_intent_processors.map do |processor_name|
-        klass = Charyf::Engine::Intent::Processors.list[processor_name]
+        klass = Charyf::Engine::Intent::Processor.list[processor_name]
         raise Charyf::Utils::InvalidConfiguration.new("No intent processor strategy found with name '#{processor_name}'") unless klass
 
         klass

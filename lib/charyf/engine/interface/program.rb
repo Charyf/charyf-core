@@ -1,4 +1,4 @@
-require_relative 'base'
+require_relative 'interface'
 require_relative '../request'
 
 module Charyf

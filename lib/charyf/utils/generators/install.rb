@@ -1,4 +1,4 @@
-require_relative 'base'
+require_relative 'generator'
 
 module Charyf
   module Generators

@@ -1,10 +1,10 @@
 require 'charyf/utils'
-require_relative 'base'
+require_relative 'processor'
 
 module Charyf
   module Engine
     class Session
-      module Processors
+      module Processor
         class Dummy < Base
 
           strategy_name :dummy

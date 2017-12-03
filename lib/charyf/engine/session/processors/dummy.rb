@@ -13,6 +13,10 @@ module Charyf
             nil
           end
 
+          def self.get
+            self.new
+          end
+
         end
       end
     end

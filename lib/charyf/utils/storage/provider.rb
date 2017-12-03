@@ -10,6 +10,7 @@ module Charyf
           Base
         end
 
+        sig_self [['Module', 'String']], ['Charyf::Utils::StorageProvider::Base'],
         def self.get_for(klass)
           raise Charyf::Utils::NotImplemented.new
         end

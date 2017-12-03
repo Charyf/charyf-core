@@ -9,10 +9,17 @@ module Charyf
         class Dummy < Base
 
           strategy_name :dummy
-          definition_extension :dummy
 
-          def determine(request, skill = nil)
+          def self.get_for(skill_name = nil)
+            self.new
+          end
+
+          def determine(request)
             unknown
+          end
+
+          def load(skill_name, block)
+            nil
           end
 
         end

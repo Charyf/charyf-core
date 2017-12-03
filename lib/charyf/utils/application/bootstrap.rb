@@ -82,13 +82,13 @@ EOS
         skills = Dir.entries(self.config.root.join('app', 'skills'))
                      .select {|entry| File.directory? self.config.root.join('app', 'skills', entry) and !(entry =='.' || entry == '..') }
 
-        skills.each do |skill_name|
-          skill_path = self.config.root.join('app', 'skills', skill_name, "#{skill_name}.rb")
+        skills.each do |skill_folder|
+          skill_path = self.config.root.join('app', 'skills', skill_folder, "#{skill_folder}.rb")
 
           begin
             require skill_path.to_s
           rescue LoadError => e
-            raise SkillLoadError.new(e, skill_name, skill_path)
+            raise SkillLoadError.new(e, skill_folder, skill_path)
           end
         end
       end
@@ -97,23 +97,38 @@ EOS
       # Init all intent parsers
       #
       initializer :init_intent_parsers, group: :all do
-        Charyf.application.intent_processors.each do |parser|
-          parser.setup
+        Charyf.application.intent_processors.each do |processor|
+          processor.setup
         end
-        # Charyf.
-        #
-        # file_pattern = "*.#{Charyf.application.config.intent_processor.to_s}.rb"
-        #
-        # Charyf::Skill.list.each do |skill_klass|
-        #
-        #   # Load routing
-        #   root = skill_klass.skill_root
-        #
-        #   Dir[root.join('intents', '**', file_pattern)].each do |routing|
-        #     require routing
-        #   end
-        #
-        # end
+      end
+
+      #
+      # Load all intents
+      #
+      initializer :load_skill_intents, groups: :all do
+        # Require Skill intents
+        Charyf::Skill.list.each do |skill_klass|
+          Dir[skill_klass.routing_source_dir.join('**', '*.rb')].each do |file|
+            require file
+          end
+        end
+
+        Charyf::Skill.list.each do |skill_klass|
+          skill_name = skill_klass.skill_name
+
+          Charyf.application.intent_processors.each do |processor|
+            # Public routing
+            skill_klass._public_routing(processor.strategy_name).each do |block|
+              processor.get_global.load skill_name, block
+            end
+
+            # Private routing
+            skill_klass._private_routing(processor.strategy_name).each do |block|
+              processor.get_for(skill_name).load skill_name, block
+            end
+
+          end
+        end
       end
 
       #

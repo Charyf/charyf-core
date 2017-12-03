@@ -1,6 +1,12 @@
+require_relative 'routing'
+require_relative 'info'
+
 module Charyf
   module Skill
     class Base
+
+      include Charyf::Skill::Routing
+      include Charyf::Skill::Info
 
       class << self
         attr_accessor :_file_path

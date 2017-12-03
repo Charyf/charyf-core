@@ -1,4 +1,6 @@
 require 'charyf/utils'
+
+require_relative 'helpers'
 require_relative '../intent'
 
 module Charyf
@@ -8,62 +10,42 @@ module Charyf
         class Base
 
           include Charyf::Strategy
+          include Charyf::Engine::Intent::Processor::Helpers
+
           def self.base
             Base
           end
 
-
-          sig ['Charyf::Engine::Request', ['String', 'Symbol', 'NilClass']], 'Charyf::Engine::Intent',
-              def determine(request, skill = nil)
-                raise Charyf::Utils::NotImplemented.new
-              end
-
-          sig [], 'Charyf::Engine::Intent',
-              def unknown
-                Charyf::Engine::Intent::UNKNOWN
-              end
-
-          def self.setup
-              # Override to run your setup
-              require_definitions
+          sig ['Charyf::Engine::Request'], 'Charyf::Engine::Intent',
+          def determine(request)
+            raise Charyf::Utils::NotImplemented.new
           end
 
-          class << self
+          #
+          # Load single block of intent definitions
+          #
+          sig_self ['Symbol', 'Proc'], nil,
+          def load(skill_name, block)
+            raise Charyf::Utils::NotImplemented.new
+          end
 
-            def definition_extension(file_extension = nil)
-              if name
-                @_definition_extension = file_extension
-              end
+          sig_self [], [nil],
+          def self.setup
+            # Override to run your setup
+          end
 
-              @_definition_extension || strategy_name
-            end
+          sig_self ['Symbol'], 'Charyf::Engine::Intent::Processor::Base',
+          def self.get_for(skill = nil)
+            raise Charyf::Utils::NotImplemented.new
+          end
 
-            def scoped_name(skill, *args)
-              ([skill.to_s] + args).join('_')
-            end
-
-            def unscope_name(skill, name)
-              name.start_with?(skill.to_s) ? name.sub("#{skill.to_s}_", '') : name
-            end
-
-            def require_definitions
-              file_pattern = "*.#{self.definition_extension}.rb"
-
-              Charyf::Skill.list.each do |skill_klass|
-
-                # Load routing
-                root = skill_klass.skill_root
-
-                Dir[root.join('intents', '**', file_pattern)].each do |definition|
-                  require definition
-                end
-
-              end
-            end
-
+          sig_self [], 'Charyf::Engine::Intent::Processor::Base',
+          def self.get_global
+            get_for(nil)
           end
 
         end
+
 
         def self.known
           Base.known

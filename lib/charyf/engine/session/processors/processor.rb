@@ -17,6 +17,11 @@ module Charyf
             raise Charyf::Utils::NotImplemented.new
           end
 
+          sig_self [], ['Charyf::Engine::Session::Processor::Base'],
+          def self.get
+            raise Charyf::Utils::NotImplemented.new
+          end
+
         end
 
 

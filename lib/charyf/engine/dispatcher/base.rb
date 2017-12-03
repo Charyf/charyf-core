@@ -23,13 +23,11 @@ module Charyf
         protected
 
         def self.intent_processors
-          Charyf.application.intent_processors.map do |processor_klass|
-            processor_klass.new
-          end
+          Charyf.application.intent_processors
         end
 
         def self.session_processor
-          Charyf.application.session_processor.new
+          Charyf.application.session_processor
         end
 
         def intent_processors
@@ -42,7 +40,6 @@ module Charyf
 
         sig ['Charyf::Engine::Context'], nil,
         def spawn_controller(context)
-
           intent = context.intent || Charyf::Engine::Intent::UNKNOWN
 
           controller_name = intent.controller + 'Controller'

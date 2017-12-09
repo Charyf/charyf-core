@@ -36,12 +36,16 @@ EOS
       #
       # Load app environment configuration files
       # Default application configuration is when a command is triggered
+      # Nothing loaded unless environment file exists
       #
       initializer :load_environment, group: :all do
         Charyf.logger.info "Charyf starting in #{Charyf.env} mode."
 
+        env_file = self.config.root.join('config', 'environments', "#{Charyf.env}.rb")
 
-        require self.config.root.join('config', 'environments', "#{Charyf.env}.rb")
+        if FileTest.exists?(env_file)
+          require env_file
+        end
       end
 
       #
@@ -154,6 +158,7 @@ EOS
 
       #
       # Load all user skill files
+      #  - controllers
       #
       initializer :load_skills, group: :all do
 

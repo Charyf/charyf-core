@@ -14,7 +14,7 @@ module Charyf
 
       def load_app
         # noinspection RubyResolve
-        require File.expand_path('config/environment.rb', app_root)
+        require File.expand_path('config/chapp.rb', app_root)
       end
 
     end

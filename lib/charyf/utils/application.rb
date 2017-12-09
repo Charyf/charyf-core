@@ -30,7 +30,7 @@ module Charyf
       end
 
       def find_root(from)
-        Charyf::Utils.find_root_with_flag 'config.ru', from, Dir.pwd
+        Charyf::Utils.find_root_with_flag 'config/chapp.rb', from
       end
 
       def config

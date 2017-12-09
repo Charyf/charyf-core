@@ -34,7 +34,7 @@ module Charyf
 
     sig [], 'Pathname',
     def app_root
-      Charyf::Utils.find_root_with_flag 'config.ru', Dir.pwd
+      Charyf::Utils.find_root_with_flag 'config/chapp.rb', Dir.pwd
     end
 
     sig ['String'], nil,

@@ -48,10 +48,9 @@ module Charyf
           controller = Object.const_get(controller_name).new(context.request, intent, context.session)
 
           # TODO log intent when done
-          Charyf.flow_logger.info("Dispatching request [#{context.request.referer.class}" +
-                                      "|#{context.request.conversation_id}" +
-                                      "|#{context.request.text}]" +
-                                      " to #{controller_name}##{action_name}"
+          Charyf.logger.flow_request("[FLOW] Dispatching request [#{context.request.inspect}]" +
+                                      ", detected intent: [#{intent.inspect}]" +
+                                      ", session : [#{context.session.inspect}]"
           )
 
           begin

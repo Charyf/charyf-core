@@ -8,9 +8,8 @@ module Charyf
     end
 
     def handle_exception(e)
-      logger.error ' - - - '
-      logger.error "#{e.class}: #{e}"
-      logger.error "Backtrace:\n\t#{e.backtrace.join("\n\t")}"
+      Charyf.logger.error "#{e.class}: #{e}".red
+      Charyf.logger.error "\n\tBacktrace: #{e.backtrace.join("\n\t")}"
 
       handlers.map { |h| h.handle_exception(e) }
 
@@ -18,10 +17,6 @@ module Charyf
     end
 
     private
-
-    def logger
-      @logger ||= Charyf::Logger.new(Charyf.root.join('log', 'error.log'))
-    end
 
     def handlers
       @handles ||= []

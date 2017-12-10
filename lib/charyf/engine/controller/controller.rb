@@ -52,10 +52,8 @@ module Charyf
         response = Charyf::Engine::Response.new(text, html)
 
 
-        Charyf.flow_logger.info("Replying on request [#{request.referer.class}" +
-                                    "|#{request.conversation_id}" +
-                                    "|#{request.text}]" +
-                                    " with |#{text}|"
+        Charyf.logger.flow_response("[FLOW] Replying on request [#{request.inspect}]" +
+                                    " with [#{response.inspect}]"
         )
 
         request.referer.reply(response)

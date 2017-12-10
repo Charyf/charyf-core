@@ -34,13 +34,6 @@ module Charyf
       @logger = Charyf::Logger.new(Charyf.root.join('log', "#{env}.log"))
     end
 
-    def flow_logger
-      return @flow_logger if @flow_logger
-
-      FileUtils.mkdir_p root.join('log')
-      @flow_logger = Charyf::Logger.new(Charyf.root.join('log', 'flow.log'))
-    end
-
     def groups(*groups)
       # TODO
       [:default, env]

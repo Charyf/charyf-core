@@ -1,4 +1,5 @@
 require 'logger'
+require 'colorize'
 
 module Charyf
   class Logger < ::Logger
@@ -11,6 +12,14 @@ module Charyf
       self.formatter = proc do |severity, datetime, progname, msg|
         "#{datetime} [#{severity}]: #{msg}\n"
       end
+    end
+
+    def flow_request(msg)
+      info(msg.green)
+    end
+
+    def flow_response(msg)
+      info(msg.blue)
     end
 
   end

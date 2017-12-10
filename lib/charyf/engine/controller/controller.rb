@@ -1,5 +1,8 @@
 require_relative '../response'
 require_relative 'renderers'
+require_relative 'conversation'
+require_relative 'helpers'
+
 require 'charyf/utils'
 
 module Charyf
@@ -7,19 +10,18 @@ module Charyf
     class Base
 
       include Renderers
+      include Conversation
+      include Helpers
 
-      attr_reader :request, :intent, :session
+      attr_reader :context
 
-      def initialize(request, intent, session)
-        @request = request
-        @intent = intent
-        @session = session
+      def initialize(context)
+        @context = context
       end
 
       def unknown
         reply text: "I don't know what you meant by '#{request.text}'"
       end
-
 
       protected
 
@@ -30,18 +32,9 @@ module Charyf
           render: nil
       )
 
-
         if text.blank? && html.blank?
-          render ||= @intent.action
-
-          if response_folder.blank?
-            raise Charyf::Controller::Renderers::InvalidState.new('Controller without skill can not render views')
-          end
-
-          if responses_for(render).empty?
-            raise Charyf::Controller::Renderers::NoResponseFound.new('No responses files found for action' + render.to_s + "\n" +
-            "Expected #{render}.[html|txt].erb in #{response_folder}")
-          end
+          render ||= intent.action
+          ensure_responses_for(render)
         end
 
         if response_folder
@@ -56,7 +49,11 @@ module Charyf
                                     " with [#{response.inspect}]"
         )
 
-        request.referer.reply(response)
+        request.referer.reply(conversation_id, response)
+      end
+
+      def conversation_id
+        request.conversation_id
       end
 
     end

@@ -32,6 +32,30 @@ module Charyf
         @_session
       end
 
+      def controller_name
+        session && session.action ?
+            session.controller :
+            intent.controller
+      end
+
+      def full_controller_name
+        session && session.action ?
+            session.full_controller_name :
+            intent.full_controller_name
+      end
+
+      def action_name
+        session && session.action ?
+            session.action :
+            intent.action
+      end
+
+      def skill_name
+        session && session.skill ?
+            session.skill :
+            intent.skill
+      end
+
     end
   end
 end

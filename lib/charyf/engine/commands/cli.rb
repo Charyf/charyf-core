@@ -1,5 +1,6 @@
 require_relative 'base'
-require_relative '../interface/program'
+
+require 'charyf/engine/interface/program'
 
 module Charyf
   module Commands
@@ -59,12 +60,12 @@ module Charyf
         end
 
         # TODO - dependency on bad "package"
-        processor = Charyf::Interface::Program.new(Process.pid, Proc.new { |response| cli_print(response.text) })
+        interface = Charyf::Interface::Program.create("cli_#{Process.pid}", Proc.new { |response| cli_print(response.text) })
 
-        request = processor.request
+        request = interface.request
         request.text = utterance
 
-        processor.process(request)
+        interface.process(request)
       end
 
 

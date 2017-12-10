@@ -22,12 +22,12 @@ module Charyf
 
       sig [], ['Symbol', 'NilClass'],
       def dispatcher
-        @dispatcher ? @dispatcher.to_sym : nil
+        (@dispatcher || 'default').to_sym
       end
 
       sig [], ['Symbol'],
       def session_processor
-        (@session_processor || 'dummy').to_sym
+        (@session_processor || 'default').to_sym
       end
 
       sig [], [Array],

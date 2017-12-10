@@ -1,3 +1,4 @@
+require 'charyf/utils'
 require_relative '../context'
 require_relative '../request'
 
@@ -40,32 +41,72 @@ module Charyf
 
         sig ['Charyf::Engine::Context'], nil,
         def spawn_controller(context)
-          intent = context.intent || Charyf::Engine::Intent::UNKNOWN
-
-          controller_name = intent.controller + 'Controller'
-          action_name = intent.action
-
-          controller = Object.const_get(controller_name).new(context.request, intent, context.session)
-
-          # TODO log intent when done
-          Charyf.logger.flow_request("[FLOW] Dispatching request [#{context.request.inspect}]" +
-                                      ", detected intent: [#{intent.inspect}]" +
-                                      ", session : [#{context.session.inspect}]"
-          )
-
           begin
-            controller.send(action_name)
-          rescue Exception => e
-            # Catch any error that may occur inside the user controller
-            controller.send(:reply, text: 'There was a problem processing your request. Check the logs please.')
+            prepare_context context
 
+            # TODO log intent when done
+            Charyf.logger.flow_request("[FLOW] Dispatching request [#{context.request.inspect}]" +
+                                        ", detected intent: [#{context.intent.inspect}]" +
+                                        ", session : [#{context.session.inspect}]"
+            )
+
+            controller = get_controller(context)
+
+            handle_before_actions(controller)
+            controller.send(context.action_name)
+            handle_after_actions(controller)
+          rescue Exception => e
             # Dispatch the error to all error handlers
             Charyf.configuration.error_handlers.handle_exception(e)
+
+            # Catch any error that may occur inside the user controller
+            controller.send(:reply, text: 'There was a problem processing your request. Check the logs please.')
           end
 
         end
 
-      end
+        private
+
+        def prepare_context(context)
+          context.intent ||= Charyf::Engine::Intent::UNKNOWN
+
+          context
+        end
+
+        def get_controller(context)
+          controller_name = context.full_controller_name +  'Controller'
+
+          Object.const_get(controller_name).new(context)
+        end
+
+        def get_action_name(context)
+          if context.session && context.session.action
+            return context.session.action
+          end
+
+          context.intent.action
+        end
+
+        def handle_before_actions(controller)
+          # code here
+        end
+
+        def handle_after_actions(controller)
+          action = controller.intent.action
+
+          # Keep session if auto converse is on
+          if controller.class._converse_on?(action)
+            session = controller.session || Charyf::Engine::Session.init(controller.request.id, controller.intent.skill)
+            session.keep!
+          end
+
+          # Auto render responses
+          if controller.class._render_on? action
+            controller.send(:reply)
+          end
+        end
+
+      end # End of Base.class
 
       def self.known
         Base.known

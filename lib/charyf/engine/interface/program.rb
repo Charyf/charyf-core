@@ -5,7 +5,32 @@ module Charyf
   module Interface
     class Program < Charyf::Interface::Base
 
+      class InvalidConversationError < StandardError; end
+
+      strategy_name :program
+
       attr_reader :handler, :conversation_id
+
+      sig_self ['String', 'Charyf::Engine::Response'], nil,
+      def self.reply(conversation_id, response)
+        interface = _interfaces[conversation_id]
+        raise InvalidConversationError.new("No program interface found for conversation #{conversation_id}") unless interface
+
+        interface.reply(response)
+      end
+
+      sig_self ['String', 'Proc'], 'Charyf::Interface::Program',
+      def self.create(conversation_id, handler)
+        interface = self.new(conversation_id, handler)
+
+        _interfaces[conversation_id] = interface
+
+        interface
+      end
+
+      def self._interfaces
+        @_interfaces ||= Hash.new
+      end
 
       sig [nil, 'Proc'],
       def initialize(conversation_id, handler)
@@ -16,7 +41,7 @@ module Charyf
 
       sig ['Charyf::Engine::Request'],
       def process(request)
-        dispatcher.dispatch(request)
+        self.class.dispatcher.dispatch(request)
       end
 
       sig ['Charyf::Engine::Response'],
@@ -26,7 +51,7 @@ module Charyf
 
       sig [], 'Charyf::Engine::Request',
       def request
-        Charyf::Engine::Request.new(self, conversation_id)
+        Charyf::Engine::Request.new(self.class, conversation_id)
       end
 
     end

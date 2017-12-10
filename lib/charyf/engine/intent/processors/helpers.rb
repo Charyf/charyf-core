@@ -10,12 +10,12 @@ module Charyf
 
           module ClassMethods
 
-            def scoped_name(skill, *args)
-              ([skill.to_s] + args).join('_')
+            def scoped_name(skill_name, *args)
+              ([skill_name.to_s] + args).join('_')
             end
 
-            def unscope_name(skill, name)
-              name.start_with?(skill.to_s) ? name.sub("#{skill.to_s}_", '') : name
+            def unscope_name(skill_name, name)
+              name.start_with?(skill_name.to_s) ? name.sub("#{skill_name.to_s}_", '') : name
             end
 
           end # End of ClassMethods

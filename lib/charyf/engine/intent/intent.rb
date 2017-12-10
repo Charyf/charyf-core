@@ -2,16 +2,14 @@ module Charyf
   module Engine
     class Intent
 
-      attr_writer :alternatives
-
-      sig [['Symbol', 'String', 'NilClass'], ['Symbol', 'String'], ['Symbol', 'String'], 'Numeric', 'Hash'], nil,
-      def initialize(skill, controller, action, confidence, matches = Hash.new)
+      sig [['Symbol', 'String', 'NilClass'], ['Symbol', 'String'], ['Symbol', 'String'], 'Numeric', 'Hash', 'Array'], nil,
+      def initialize(skill, controller, action, confidence, matches = Hash.new, alternatives = [])
         @_skill = skill.to_s
         @_controller = controller.to_s
         @_action = action.to_s.downcase
         @_confidence = confidence
         @_matches = matches
-        @_alternatives = []
+        @_alternatives = alternatives
       end
 
       sig [], 'Hash',
@@ -25,8 +23,13 @@ module Charyf
       end
 
       sig [], ['Symbol', 'String'],
+      def full_controller_name
+        @_skill.blank? ? @_controller.camelize : @_skill.camelize + '::' + @_controller.camelize
+      end
+
+      sig [], ['Symbol', 'String'],
       def controller
-        @_skill.empty? ? @_controller.camelize : @_skill.camelize + '::' + @_controller.camelize
+        @_controller
       end
 
       sig [], ['Symbol', 'String'],

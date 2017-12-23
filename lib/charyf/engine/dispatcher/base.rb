@@ -88,17 +88,17 @@ module Charyf
         end
 
         def handle_before_actions(controller)
-          # code here
+          action = controller.action_name
+
+          # Handle before actions
+          controller._before_actions(action).each do |method_name|
+            controller.send(method_name)
+          end
+
         end
 
         def handle_after_actions(controller)
-          action = controller.intent.action
-
-          # Keep session if auto converse is on
-          if controller.class._converse_on?(action)
-            session = controller.session || Charyf::Engine::Session.init(controller.request.id, controller.intent.skill)
-            session.keep!
-          end
+          action = controller.action_name
 
           # Auto render responses
           if controller.class._render_on? action

@@ -16,17 +16,19 @@ module Charyf
           strategy_name :default
 
           def process(request)
-            session = Charyf::Engine::Session.get(request.id)
+            # session = Charyf::Engine::Session.get(request.id)
+            #
+            # return unless session
+            #
+            # if session && Time.now - session.timestamp > SESSION_TIMEOUT
+            #   session.destroy!
+            #   return nil
+            # end
+            #
+            # session.invalidate!
+            # session
 
-            return unless session
-
-            if session && Time.now - session.timestamp > SESSION_TIMEOUT
-              session.destroy!
-              return nil
-            end
-
-            session.invalidate!
-            session
+            nil
           end
 
           def self.get

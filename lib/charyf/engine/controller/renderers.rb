@@ -1,4 +1,5 @@
 require 'erb'
+require 'charyf/utils'
 
 module Charyf
   module Controller
@@ -7,7 +8,6 @@ module Charyf
       class ResponseFileMissingError < StandardError; end
       class NoResponseFound < StandardError; end
       class InvalidState < StandardError; end
-      class InvalidDefinitionError < StandardError; end
 
       def self.included(base)
         base.extend(ClassMethods)
@@ -15,18 +15,12 @@ module Charyf
 
       module ClassMethods
 
-        def auto_reply(only: [], except: [])
-          if only && !only.empty? && except && !except.empty?
-            raise InvalidDefinitionError.new("Define only or except, don't define both");
-          end
-
-          @_render_on = (except && !except.empty?) ? :all : only.map(&:to_sym)
-          @_dont_render_on = except.map(&:to_sym)
+        def auto_reply(only: :all, except: [])
+          @_render_filters = Charyf::Utils.create_action_filters(only, except)
         end
 
         def _render_on?(action)
-          (@_render_on == :all && !@_dont_render_on.include?(action.to_sym)) ||
-              ((@_render_on != :all) && (@_render_on || []).include?(action.to_sym))
+          Charyf::Utils.match_action_filters?(action.to_sym, @_render_filters)
         end
 
       end # End of ClassMethods

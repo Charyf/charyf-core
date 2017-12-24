@@ -91,7 +91,7 @@ module Charyf
           action = controller.action_name
 
           # Handle before actions
-          controller._before_actions(action).each do |method_name|
+          controller.class._before_actions(action).each do |method_name|
             controller.send(method_name)
           end
 

@@ -15,12 +15,16 @@ module Charyf
 
       module ClassMethods
 
-        def auto_reply(only: :all, except: [])
+        def auto_reply(only: [], except: [])
           @_render_filters = Charyf::Utils.create_action_filters(only, except)
         end
 
         def _render_on?(action)
-          Charyf::Utils.match_action_filters?(action.to_sym, @_render_filters)
+          Charyf::Utils.match_action_filters?(action.to_sym, _render_filters)
+        end
+
+        def _render_filters
+          @_render_filters ||= Charyf::Utils.create_action_filters
         end
 
       end # End of ClassMethods

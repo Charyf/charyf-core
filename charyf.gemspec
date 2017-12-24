@@ -38,6 +38,7 @@ Gem::Specification.new do |spec|
   # External dependencies
   spec.add_runtime_dependency 'i18n', '~> 0.9'
   spec.add_runtime_dependency 'colorize', '~> 0.8'
+  spec.add_runtime_dependency 'thor', '>= 0.18.1', '< 2.0'
 
   # Development dependencies
   spec.add_development_dependency 'bundler', '~> 1.15.4'

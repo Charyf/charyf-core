@@ -1,3 +1,3 @@
-require 'charyf/utils'
+require_relative 'utils'
 
-require 'charyf/engine/all'
+require_relative 'engine/all'

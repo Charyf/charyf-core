@@ -1,10 +1,4 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
-require 'charyf'
-
-if ARGV.empty?
-  Charyf::Commands.invoke 'help', *ARGV
-  exit(1)
-end
-
-Charyf::Commands.invoke ARGV.shift, *ARGV
+require "charyf/utils/cli"

@@ -7,6 +7,7 @@ module Charyf
     class CLI < Charyf::Commands::Base
 
       def start
+        build_interface
         print_intro
 
         begin
@@ -59,13 +60,10 @@ module Charyf
           return
         end
 
-        # TODO - dependency on bad "package"
-        interface = Charyf::Interface::Program.create("cli_#{Process.pid}", Proc.new { |response| cli_print(response.text) })
-
-        request = interface.request
+        request = @interface.request
         request.text = utterance
 
-        interface.process(request)
+        @interface.process(request)
       end
 
 
@@ -80,7 +78,12 @@ module Charyf
             print_help
         end
 
+      end
 
+      def build_interface
+        # TODO - dependency on bad "package"
+        @interface = Charyf::Interface::Program.create("cli_#{Process.pid}", Proc.new { |response| cli_print(response.text) })
+        $stderr.puts "Created program interface for process ##{Process.pid}."
       end
 
     end

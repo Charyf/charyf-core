@@ -3,6 +3,9 @@ module Charyf
     class Configuration
 
       attr_reader :root
+
+      attr_accessor :console
+
       attr_accessor :session_processor, :storage_provider, :dispatcher
       attr_accessor :enabled_intent_processors
 

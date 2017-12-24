@@ -1,4 +1,4 @@
-require_relative '../string'
+require_relative '../../support/string'
 require_relative '../strategy'
 
 module Charyf

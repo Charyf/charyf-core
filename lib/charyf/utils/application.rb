@@ -17,7 +17,7 @@ module Charyf
         base.called_from = begin
           call_stack = caller_locations.map { |l| l.absolute_path || l.path }
 
-          File.dirname(call_stack.detect { |p| p !~ %r[railties[\w.-]*/lib/rails|rack[\w.-]*/lib/rack] })
+          File.dirname(call_stack.detect { |p| p !~ %r[charyf[\w.-]*/lib/utils] })
         end
       end
 

@@ -1,1 +1,2 @@
-require 'charyf/utils/all'
+require_relative 'support'
+require_relative 'utils/all'

@@ -14,5 +14,9 @@ module Charyf
   def self._gem_source
     Pathname.new(__FILE__).dirname
   end
+
+  def self.version
+    Charyf::VERSION
+  end
   # Your code goes here...
 end

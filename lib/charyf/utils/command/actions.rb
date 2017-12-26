@@ -5,7 +5,6 @@ module Charyf
     module Actions
 
       # def set_application_directory!
-      #   binding.pry
       #   Dir.chdir(File.expand_path("../..", APP_PATH)) unless File.exist?(File.expand_path("config.ru"))
       # end
 

@@ -1,5 +1,6 @@
 require 'erb'
-require 'charyf/utils'
+
+require_relative '../../utils'
 
 module Charyf
   module Controller

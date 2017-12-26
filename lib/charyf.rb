@@ -1,13 +1,13 @@
-require 'charyf/version'
+require_relative 'charyf/version'
 
 # Require dependencies on other gems
-require 'charyf/deps'
+require_relative 'charyf/deps'
 
 # Require utils
-require 'charyf/utils'
+require_relative 'charyf/utils'
 
 # Require charyf engine core
-require 'charyf/engine'
+require_relative 'charyf/engine'
 
 module Charyf
 
@@ -15,8 +15,4 @@ module Charyf
     Pathname.new(__FILE__).dirname
   end
 
-  def self.version
-    Charyf::VERSION
-  end
-  # Your code goes here...
 end

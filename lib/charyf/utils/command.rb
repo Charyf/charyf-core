@@ -19,11 +19,6 @@ module Charyf
         @hidden_commands ||= []
       end
 
-      # Track all command subclasses.
-      def subclasses
-        @subclasses ||= []
-      end
-
       def load_builtin_commands!
         unless @_commands_loaded
           require_relative 'commands/all'

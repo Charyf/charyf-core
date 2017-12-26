@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+# require_relative '../lib/charyf'
+# require_relative '../lib/charyf/utils/commands'
 require_relative '../lib/charyf'
-require_relative '../lib/charyf/utils/commands'
+require_relative '../lib/charyf/utils/cli'

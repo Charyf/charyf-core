@@ -1,7 +1,5 @@
 # Dependency on utils
-require 'charyf/utils/all'
-
-require_relative 'dispatcher/base'
+require_relative '../utils'
 
 module Charyf
 end

@@ -1,6 +1,6 @@
-require 'charyf/utils'
-require 'charyf/engine/session/session'
+require_relative '../../../utils'
 
+require_relative '../session'
 require_relative 'processor'
 
 module Charyf

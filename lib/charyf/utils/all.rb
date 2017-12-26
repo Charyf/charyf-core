@@ -1,6 +1,3 @@
-require_relative 'generators/generator'
-require_relative 'generators/install'
-
 require_relative 'parser/parser'
 require_relative 'parser/en_parser'
 

@@ -1,10 +1,10 @@
+require_relative '../../utils'
+
 require_relative '../response'
 require_relative 'renderers'
 require_relative 'conversation'
 require_relative 'helpers'
 require_relative 'actions'
-
-require 'charyf/utils'
 
 module Charyf
   module Controller

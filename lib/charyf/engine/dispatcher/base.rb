@@ -1,4 +1,5 @@
-require 'charyf/utils'
+require_relative '../../utils'
+
 require_relative '../context'
 require_relative '../request'
 
@@ -44,7 +45,6 @@ module Charyf
           begin
             prepare_context context
 
-            # TODO log intent when done
             Charyf.logger.flow_request("[FLOW] Dispatching request [#{context.request.inspect}]" +
                                         ", detected intent: [#{context.intent.inspect}]" +
                                         ", session : [#{context.session.inspect}]"

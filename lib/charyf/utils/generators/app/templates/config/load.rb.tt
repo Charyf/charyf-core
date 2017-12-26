@@ -1,0 +1,7 @@
+# As we don't support the idea of auto require at boot,
+# we provide you a way to require everything you need in front.
+#
+# We suggest to require everything only when needed
+#
+# Here you can list requires to all libraries that need to be present at boot time
+# Typically all charyf components like intent processors and memory providers

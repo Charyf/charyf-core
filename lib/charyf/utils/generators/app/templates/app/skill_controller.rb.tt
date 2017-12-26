@@ -1,0 +1,8 @@
+class SkillController < Charyf::Controller::Base
+
+  def unknown
+    logger.warn("Unknown response for request: #{request.inspect}")
+    reply(text: "I am sorry, I can't help you with that.")
+  end
+
+end

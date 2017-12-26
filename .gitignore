@@ -7,6 +7,8 @@
 /spec/reports/
 /tmp/
 
+pkg/
+
 # rspec failure tracking
 .rspec_status
 .rvmrc

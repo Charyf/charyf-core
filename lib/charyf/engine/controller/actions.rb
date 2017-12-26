@@ -20,6 +20,10 @@ module Charyf
 
       end # End of ClassMethods
 
+      def logger
+        Charyf.logger
+      end
+
     end
   end
 end

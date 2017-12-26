@@ -1,0 +1,30 @@
+require File.expand_path('../boot', __FILE__)
+# Charyf does not use Bundler.require in order to reduce boot time
+# Each gem should be loaded individually using 'require'
+# To load gem only in specific environment, add the require statement
+# to the correct file in the environments folder
+require 'charyf'
+require_relative 'load'
+
+module <%= app_const_base %>
+  class Application < Charyf::Application
+
+    # I18n
+    config.i18n.available_locales = [:en]
+
+    config.i18n.default_locale = :en
+
+    # Processor
+    config.enabled_intent_processors = [:dummy]
+
+    # Dispatcher
+    # config.dispatcher = :default
+
+    # Session
+    # config.dispatcher = :default
+
+    # Storage
+    config.storage_provider = :memory
+
+  end
+end

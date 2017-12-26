@@ -47,7 +47,7 @@ module Charyf
         @_skill
       end
 
-      UNKNOWN = Intent.new(nil, :Application, :unknown, 0)
+      UNKNOWN = Intent.new(nil, :Skill, :unknown, 0)
 
     end
   end

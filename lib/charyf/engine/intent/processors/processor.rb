@@ -1,4 +1,4 @@
-require 'charyf/utils'
+require_relative '../../../utils'
 
 require_relative 'helpers'
 require_relative '../intent'

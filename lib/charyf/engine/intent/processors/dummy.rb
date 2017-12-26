@@ -1,4 +1,5 @@
-require 'charyf/utils'
+require_relative '../../../utils'
+
 require_relative '../intent'
 require_relative 'processor'
 

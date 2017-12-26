@@ -68,7 +68,7 @@ EOS
       # Load APP default files
       #
       initializer :load_defaults, group: :all do
-        require self.config.root.join('app', 'application_controller.rb')
+        require self.config.root.join('app', 'skill_controller.rb')
 
       end
 

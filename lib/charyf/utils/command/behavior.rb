@@ -10,6 +10,12 @@ module Charyf
       end
 
       module ClassMethods
+
+        # Track all subclasses.
+        def subclasses
+          @subclasses ||= []
+        end
+
         # Remove the color from output.
         def no_color!
           Thor::Base.shell = Thor::Shell::Basic

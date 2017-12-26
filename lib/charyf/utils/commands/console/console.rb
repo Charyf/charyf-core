@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'irb'
 
 require_relative '../../command/base'
 require_relative '../../command/environment_argument'

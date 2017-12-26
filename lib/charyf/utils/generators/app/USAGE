@@ -1,0 +1,8 @@
+Description:
+    The 'charyf new' command creates a new Charyf application with a default
+    directory structure and configuration at the path you specify.
+
+Example
+    charyf new ~/Code/Ruby/weblog
+
+    This generates a skeletal Charyf installation in ~/Code/Ruby/weblog.

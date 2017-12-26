@@ -1,4 +1,4 @@
-require 'charyf/utils'
+require_relative '../../utils'
 
 require_relative '../response'
 require_relative '../dispatcher/base'

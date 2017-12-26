@@ -5,7 +5,7 @@ require 'charyf/version'
 
 Gem::Specification.new do |spec|
   spec.name          = 'charyf'
-  spec.version       = Charyf::VERSION
+  spec.version       = Charyf::VERSION::STRING
   spec.authors       = ['Richard Ludvigh']
   spec.email         = ['richard.ludvigh@gmail.com']
 
@@ -25,7 +25,7 @@ Gem::Specification.new do |spec|
   end
 
   spec.files         = Dir['**/*'].reject do |f|
-    f.match(%r{^(test|spec|features)/})
+    f.match(%r{^(test|spec|features|pkg)/})
   end
   spec.require_paths = ['lib']
 

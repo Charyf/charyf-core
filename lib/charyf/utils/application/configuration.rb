@@ -1,6 +1,9 @@
+require_relative '../app_engine'
+require_relative '../extension/configuration'
+
 module Charyf
-  class Application
-    class Configuration
+  class Application < AppEngine
+    class Configuration < Extension::Configuration
 
       attr_reader :root
 

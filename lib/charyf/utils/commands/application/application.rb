@@ -23,7 +23,7 @@ module Charyf
       end
 
       def perform(*args)
-        Charyf::Generators::AppGenerator.start \
+        Charyf::Generators::CliAppGenerator.start \
           Charyf::Generators::ARGVScrubber.new(args).prepare!
       end
     end

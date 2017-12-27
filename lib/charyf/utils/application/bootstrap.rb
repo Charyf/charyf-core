@@ -1,8 +1,9 @@
+require_relative '../app_engine'
 require_relative '../initializable'
 require 'i18n'
 
 module Charyf
-  class Application
+  class Application < AppEngine
     # noinspection RubyResolve
     module Bootstrap
 

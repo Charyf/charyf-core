@@ -1,9 +1,15 @@
+require_relative 'configuration'
+
 require_relative 'application/configuration'
 require_relative 'application/bootstrap'
+
+require_relative 'app_engine'
 require_relative 'utils'
 
+require_relative '../support'
+
 module Charyf
-  class Application
+  class Application < AppEngine
 
     include Charyf::Initializable
 
@@ -22,11 +28,7 @@ module Charyf
       end
 
       def instance
-        @instance ||= self.new
-
-        @instance.run_load_hooks!
-
-        @instance
+        super.run_load_hooks!
       end
 
       def find_root(from)

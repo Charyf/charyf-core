@@ -19,16 +19,13 @@ module Charyf
         @hidden_commands ||= []
       end
 
-      def load_builtin_commands!
-        unless @_commands_loaded
-          require_relative 'commands/all'
-          @_commands_loaded = true
-        end
+      def load_commands!
+        require_relative 'commands/all'
       end
 
       # Receives a namespace, arguments and the behavior to invoke the command.
       def invoke(full_namespace, args = [], **config)
-        load_builtin_commands!
+        load_commands!
 
         namespace = full_namespace = full_namespace.to_s
 
@@ -72,6 +69,13 @@ module Charyf
 
         charyf = groups.delete('charyf')
         [['charyf', charyf]] + groups.sort.to_a
+      end
+
+      # Returns the root of the Rails engine or app running the command.
+      def root
+        if defined?(APP_PATH)
+          Pathname.new(File.expand_path("../..", APP_PATH))
+        end
       end
 
       private

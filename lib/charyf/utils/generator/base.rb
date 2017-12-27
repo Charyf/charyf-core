@@ -23,6 +23,21 @@ module Charyf
       add_runtime_options!
       strict_args_position!
 
+      # Cache source root and add lib/generators/base/generator/templates to
+      # source paths.
+      def self.inherited(base) #:nodoc:
+        super
+
+        # Invoke source_root so the default_source_root is set.
+        base.source_root
+
+
+        if base.name && base.name !~ /Base$/
+          Charyf::Generators.subclasses << base
+        end
+
+      end
+
       class << self
         # Tries to get the description from a USAGE file one folder above the command
         # root.

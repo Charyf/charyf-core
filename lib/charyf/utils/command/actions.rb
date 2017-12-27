@@ -14,6 +14,11 @@ module Charyf
           Charyf.application.initialize!
         end
       end
+
+      def load_generators
+        Charyf.application.load_generators
+      end
+
     end
   end
 end

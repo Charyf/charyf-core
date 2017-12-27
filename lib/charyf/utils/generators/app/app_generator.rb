@@ -159,14 +159,9 @@ module Charyf
         def self.banner
           "charyf new #{arguments.map(&:usage).join(' ')} [options] \n"
         end
-      #
+
       private
-      #
-      #   # Define file as an alias to create_file for backwards compatibility.
-      #   def file(*args, &block)
-      #     create_file(*args, &block)
-      #   end
-      #
+
         def app_name
           @app_name ||= (defined_app_const_base? ? defined_app_name : File.basename(destination_root)).tr('\\', "").tr(". ", "_")
         end
@@ -176,7 +171,7 @@ module Charyf
         end
 
         def defined_app_const_base
-          Charyf.respond_to?(:app) && defined?(Charyf::Application) &&
+          Charyf.respond_to?(:application) && defined?(Charyf::Application) &&
             Charyf.application.is_a?(Charyf::Application) && Charyf.application.class.name.sub(/::Application$/, "")
         end
         #
@@ -203,20 +198,6 @@ module Charyf
           end
         end
 
-      #   def mysql_socket
-      #     @mysql_socket ||= [
-      #       "/tmp/mysql.sock",                        # default
-      #       "/var/run/mysqld/mysqld.sock",            # debian/gentoo
-      #       "/var/tmp/mysql.sock",                    # freebsd
-      #       "/var/lib/mysql/mysql.sock",              # fedora
-      #       "/opt/local/lib/mysql/mysql.sock",        # fedora
-      #       "/opt/local/var/run/mysqld/mysqld.sock",  # mac + darwinports + mysql
-      #       "/opt/local/var/run/mysql4/mysqld.sock",  # mac + darwinports + mysql4
-      #       "/opt/local/var/run/mysql5/mysqld.sock",  # mac + darwinports + mysql5
-      #       "/opt/lampp/var/mysql/mysql.sock"         # xampp for linux
-      #     ].find { |f| File.exist?(f) } unless Gem.win_platform?
-      #   end
-      #
         def get_builder_class
           defined?(::AppBuilder) ? ::AppBuilder : Charyf::Generators::AppBuilder
         end

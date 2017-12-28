@@ -8,9 +8,27 @@ module Charyf
   module Generators
     include Charyf::Command::Behavior
 
-    REMOVED_GENERATORS = %w(app cli_app)
+    REMOVED_GENERATORS = %w(app cli_app intents)
+
+
+    DEFAULT_ALIASES = {}
+
+    DEFAULT_OPTIONS = {
+        charyf: {
+            enabled_intents: [:dummy],
+            intents: true
+        }
+    }
 
     class << self
+
+      def aliases #:nodoc:
+        @aliases ||= DEFAULT_ALIASES.dup
+      end
+
+      def options #:nodoc:
+        @options ||= DEFAULT_OPTIONS.dup
+      end
 
       # Returns an array of generator namespaces that are hidden.
       # Generator namespaces may be hidden for a variety of reasons.
@@ -21,6 +39,8 @@ module Charyf
       def hide_namespaces(*namespaces)
         hidden_namespaces.concat(namespaces)
       end
+
+      alias hide_namespace hide_namespaces
 
       # Show help message with available generators.
       def help(command = "generate")
@@ -43,10 +63,6 @@ module Charyf
       # It's used as the default entry point for generate, destroy and update
       # commands.
       def invoke(namespace, args = ARGV, config = {})
-
-        # require 'pry'
-        # binding.pry
-
         names = namespace.to_s.split(":")
         if klass = find_by_namespace(names.pop, names.any? && names.join(":"))
           args << "--help" if args.empty? && klass.arguments.any?(&:required?)
@@ -67,6 +83,7 @@ module Charyf
       end
 
       def configure!(config) #:nodoc:
+        options.deep_merge! config.options, union_arrays: true
         hide_namespaces(*config.hidden_namespaces)
       end
 
@@ -97,19 +114,16 @@ module Charyf
         subclasses.map(&:namespace)
       end
 
-      # Rails finds namespaces similar to Thor, it only adds one rule:
+      # Charyf finds namespaces similar to Thor, it only adds one rule:
       #
-      # Generators names must end with "_generator.rb". This is required because Rails
-      # looks in load paths and loads the generator just before it's going to be used.
-      #
-      #   find_by_namespace :webrat, :rails, :integration
+      #   find_by_namespace :foo, :charyf, :bar
       #
       # Will search for the following generators:
       #
-      #   "rails:webrat", "webrat:integration", "webrat"
+      #   "charyf:foo", "foo:bar", "foo"
       #
-      # Notice that "rails:generators:webrat" could be loaded as well, what
-      # Rails looks for is the first and last parts of the namespace.
+      # Notice that "charyf:generators:bar" could be loaded as well, what
+      # Charyf looks for is the first and last parts of the namespace.
       def find_by_namespace(name, base = nil, context = nil) #:nodoc:
         lookups = []
         lookups << "#{base}:#{name}"    if base
@@ -144,7 +158,7 @@ module Charyf
       # Shoulda then can tell generators to search for test_unit generators when
       # some of them are not available by adding a fallback:
       #
-      #   Rails::Generators.fallbacks[:shoulda] = :test_unit
+      #   Charyf::Generators.fallbacks[:shoulda] = :test_unit
       def fallbacks
         @fallbacks ||= {}
       end

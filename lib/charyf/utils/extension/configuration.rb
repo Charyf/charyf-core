@@ -38,7 +38,7 @@ module Charyf
       # end
       #
       # # Defines generic callbacks to run before #after_initialize. Useful for
-      # # Rails::Railtie subclasses.
+      # # Charyf::Extension subclasses.
       # def to_prepare(&blk)
       #   to_prepare_blocks << blk if blk
       # end

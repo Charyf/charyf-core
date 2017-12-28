@@ -31,41 +31,75 @@ module Charyf
         # Invoke source_root so the default_source_root is set.
         base.source_root
 
-
         if base.name && base.name !~ /Base$/
           Charyf::Generators.subclasses << base
         end
 
       end
 
-      class << self
-        # Tries to get the description from a USAGE file one folder above the command
-        # root.
-        def desc(usage = nil, description = nil, options = {})
-          if usage
-            super
-          else
-            @desc ||= ERB.new(File.read(desc_file)).result(binding) if desc_file
-          end
-        end
-
-        def desc_file(desc_file = nil)
-          @desc_file = desc_file if desc_file
-
-          @desc_file if @desc_file && File.exist?(@desc_file)
+      # Tries to get the description from a USAGE file one folder above the command
+      # root.
+      def self.desc(usage = nil, description = nil, options = {})
+        if usage
+          super
+        else
+          @desc ||= ERB.new(File.read(desc_file)).result(binding) if desc_file
         end
       end
+
+      def self.desc_file(desc_file = nil)
+        @desc_file = desc_file if desc_file
+
+        @desc_file if @desc_file && File.exist?(@desc_file)
+      end
+
+      def self.hook_for(*names, &block)
+        options = names.last.is_a?(Hash) ? names.pop : {}
+        in_base = options.delete(:in) || base_name
+        as_hook = options.delete(:as) || generator_name
+
+        names.each do |name|
+          unless class_options.key?(name)
+            defaults = if options[:type] == :boolean
+                         {}
+                       elsif [true, false].include?(default_value_for_option(name, options))
+                         { banner: "", type: :boolean }
+                       elsif default_value_for_option(name, options).is_a? Array
+                         { desc: "#{name.to_s} to be invoked", banner: "NAMES", type: :array }
+                       else
+                         { desc: "#{name.to_s} to be invoked", banner: "NAME" }
+                       end
+
+            class_option(name, defaults.merge!(options))
+          end
+
+          hooks[name] = [ in_base, as_hook ]
+          invoke_from_option(name, options, &block)
+        end
+      end
+
+      # # Remove a previously added hook.
+      # #
+      # #   remove_hook_for :orm
+      # def self.remove_hook_for(*names)
+      #   remove_invocation(*names)
       #
-      # class_option :skip_namespace, type: :boolean, default: false,
-      #              desc: "Skip namespace (affects only isolated applications)"
+      #   names.each do |name|
+      #     hooks.delete(name)
+      #   end
+      # end
       #
-      # add_runtime_options!
-      # strict_args_position!
-      #
+      # Make class option aware of Charyf::Generators.options
+      def self.class_option(name, options = {}) #:nodoc:
+        options[:desc]    = "Indicates when to generate #{name.to_s.downcase}" unless options.key?(:desc)
+        options[:default] = default_value_for_option(name, options)
+        super(name, options)
+      end
+
       # Returns the source root for this generator using default_source_root as default.
       def self.source_root(path = nil)
         @_source_root = path if path
-        @_source_root ||= default_source_root
+        @_source_root ||= default_source_root || super
       end
 
       # Convenience method to get the namespace from the class name. It's the
@@ -82,8 +116,71 @@ module Charyf
         Charyf::Generators.hide_namespace(namespace)
       end
 
+      protected
+
+      # Shortcut to invoke with padding and block handling. Use internally by
+      # invoke and invoke_from_option class methods.
+      def _invoke_for_class_method(klass, command = nil, *args, &block) #:nodoc:
+        with_padding do
+          if block
+            case block.arity
+              when 3
+                yield(self, klass, command)
+              when 2
+                yield(self, klass)
+              when 1
+                instance_exec(klass, &block)
+            end
+          else
+            invoke klass, command, *args
+          end
+        end
+      end
+
+      # Prepare class invocation to search on Charyf namespace if a previous
+      # added hook is being used.
+      def self.prepare_for_invocation(name, value) #:nodoc:
+        return super unless value.is_a?(String) || value.is_a?(Symbol) #|| value.is_a?(Array)
+
+        if value && constants = hooks[name]
+          value = name if TrueClass === value
+          Charyf::Generators.find_by_namespace(value, *constants)
+        elsif klass = Charyf::Generators.find_by_namespace(value)
+          klass
+        else
+          super
+        end
+      end
+
+      private
+
+      # Keep hooks configuration that are used on prepare_for_invocation.
+      def self.hooks #:nodoc:
+        @hooks ||= from_superclass(:hooks, {})
+      end
+
+
+      # Returns the default value for the option name given doing a lookup in
+      # Charyf::Generators.options.
+      def self.default_value_for_option(name, options) # :doc:
+        default_for_option(Charyf::Generators.options, name, options, options[:default])
+      end
+
+      # Returns default for the option name given doing a lookup in config.
+      def self.default_for_option(config, name, options, default) # :doc:
+        if generator_name && (c = config[generator_name.to_sym]) && c.key?(name)
+          c[name]
+        elsif base_name && (c = config[base_name.to_sym]) && c.key?(name)
+          c[name]
+        elsif config[:charyf].key?(name)
+          config[:charyf][name]
+        else
+          default
+        end
+      end
+
       # Returns the default source root for a given generator. This is used internally
-      # by rails to set its generators source root. If you want to customize your source
+      # by Charyf to set its generators source root. If you want to customize your source
       # root, you should use source_root.
       def self.default_source_root
         return unless base_name && generator_name
@@ -113,7 +210,7 @@ module Charyf
       end
 
       # Removes the namespaces and get the generator name. For example,
-      # Rails::Generators::ModelGenerator will return "model" as generator name.
+      # Charyf::Generators::SkillGenerator will return "skill" as generator name.
       def self.generator_name # :doc:
         @generator_name ||= begin
           if generator = name.to_s.split("::").last
@@ -142,14 +239,6 @@ module Charyf
           end
         }
       end
-      #
-      # def self.usage_path # :doc:
-      #   paths = [
-      #       source_root && File.expand_path("../USAGE", source_root),
-      #       default_generator_root && File.join(default_generator_root, "USAGE")
-      #   ]
-      #   paths.compact.detect {|path| File.exist? path}
-      # end
 
       def self.default_generator_root # :doc:
         path = File.expand_path(File.join('..', 'generators', generator_name), base_root)

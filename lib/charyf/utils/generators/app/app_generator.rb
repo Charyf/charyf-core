@@ -33,6 +33,21 @@ module Charyf
         template 'Gemfile.erb', 'Gemfile'
       end
 
+      def update_gemfile
+
+        gemfile_entries.each do |entry|
+          options = entry.options.dup
+          options[:comment] = entry.comment if entry.comment && !entry.comment.empty?
+
+          versions = entry.version ? entry.version.split(", ") : nil
+
+          args = [entry.name, versions, options].flatten.compact
+
+          @generator.gem *args
+        end
+
+      end
+
       def gitignore
         template 'gitignore', '.gitignore'
       end
@@ -101,12 +116,11 @@ module Charyf
       #                      desc: "Preconfigure smaller stack for API only apps"
 
         class_option :skip_bundle, type: :boolean, aliases: "-B", default: false,
-                                   desc: "Don't run bundle install"
+                     desc: "Don't run bundle install"
 
         def initialize(*args)
           super
-
-          if options[:install]
+          if options[:lib]
             self.options = options.merge(skip_git: true).freeze
           end
 
@@ -118,8 +132,28 @@ module Charyf
         def create_root_files
           build(:readme)
           build(:gitignore)   unless options[:skip_git]
-          build(:gemfile)     unless options[:skip_gemfile]
           build(:version_control)
+
+
+          unless options[:skip_gemfile]
+            if options[:lib]
+
+              begin
+                # Temporary change root
+                self.destination_root = File.expand_path('..', destination_root)
+                if File.exist?(File.join(destination_root, 'Gemfile'))
+                  build(:update_gemfile)
+                else
+                  build(:gemfile)
+                end
+              ensure
+                self.destination_root = File.expand_path('charyf', destination_root)
+              end
+
+            else
+              build(:gemfile)
+            end
+          end
         end
 
         def create_app_files
@@ -144,10 +178,6 @@ module Charyf
 
         def create_tmp_files
           build(:tmp)
-        end
-
-        def finish_template
-          build(:leftovers)
         end
 
         public_task :run_bundle

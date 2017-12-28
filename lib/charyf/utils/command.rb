@@ -41,7 +41,15 @@ module Charyf
         command = find_by_namespace(namespace, command_name)
 
         # if command && command.all_commands[command_name]
+        if command
           command.perform(command_name, args, config)
+        else
+          $stderr.puts "Unknown command #{full_namespace}\n\n"
+          command_name, namespace = "help", "help"
+          command = find_by_namespace(namespace, command_name)
+          command.perform(command_name, args, config)
+        end
+
         # else
         #   find_by_namespace("rake").perform(full_namespace, args, config)
         # end
@@ -71,7 +79,7 @@ module Charyf
         [['charyf', charyf]] + groups.sort.to_a
       end
 
-      # Returns the root of the Rails engine or app running the command.
+      # Returns the root of the Charyf engine or app running the command.
       def root
         if defined?(APP_PATH)
           Pathname.new(File.expand_path("../..", APP_PATH))

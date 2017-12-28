@@ -9,149 +9,137 @@ module Charyf
         @in_group = nil
         @after_bundle_callbacks = []
       end
+
+      # Adds an entry into +Gemfile+ for the supplied gem.
       #
-      # # Adds an entry into +Gemfile+ for the supplied gem.
-      # #
-      # #   gem "rspec", group: :test
-      # #   gem "technoweenie-restful-authentication", lib: "restful-authentication", source: "http://gems.github.com/"
-      # #   gem "charyf", "1.0", git: "https://github.com/charyf/charyf-core"
-      # #   gem "RedCloth", ">= 4.1.0", "< 4.2.0"
-      # def gem(*args)
-      #   options = args.extract_options!
-      #   name, *versions = args
+      #   gem "rspec", group: :test
+      #   gem "technoweenie-restful-authentication", lib: "restful-authentication", source: "http://gems.github.com/"
+      #   gem "charyf", "1.0", git: "https://github.com/Charyf/charyf-core"
+      #   gem "RedCloth", ">= 4.1.0", "< 4.2.0"
+      def gem(*args)
+        options = args.last.is_a?(Hash) ? args.pop : {}
+        name, *versions = args
+
+        # Set the message to be shown in logs. Uses the git repo if one is given,
+        # otherwise use name (version).
+        parts, message = [quote(name)], name.dup
+
+        if versions = versions.any? ? versions : options.delete(:version)
+          _versions = Array(versions)
+          _versions.each do |version|
+            parts << quote(version)
+          end
+          message << " (#{_versions.join(", ")})"
+        end
+        message = options[:git] if options[:git]
+
+        log :gemfile, message
+
+        comment = options.delete(:comment)
+
+        options.each do |option, value|
+          parts << "#{option}: #{quote(value)}"
+        end
+
+        in_root do
+          str = "gem #{parts.join(", ")}"
+          str = "  " + str if @in_group
+          str = "\n" + str
+          str = "\n#{'  ' if @in_group}# #{comment}" + str if comment
+          append_file "Gemfile", str, verbose: false
+        end
+      end
+
+      # Wraps gem entries inside a group.
       #
-      #   # Set the message to be shown in logs. Uses the git repo if one is given,
-      #   # otherwise use name (version).
-      #   parts, message = [quote(name)], name.dup
-      #
-      #   if versions = versions.any? ? versions : options.delete(:version)
-      #     _versions = Array(versions)
-      #     _versions.each do |version|
-      #       parts << quote(version)
-      #     end
-      #     message << " (#{_versions.join(", ")})"
+      #   gem_group :development, :test do
+      #     gem "rspec"
       #   end
-      #   message = options[:git] if options[:git]
+      def gem_group(*names, &block)
+        name = names.map(&:inspect).join(", ")
+        log :gemfile, "group #{name}"
+
+        in_root do
+          append_file "Gemfile", "\ngroup #{name} do", force: true
+
+          @in_group = true
+          instance_eval(&block)
+          @in_group = false
+
+          append_file "Gemfile", "\nend\n", force: true
+        end
+      end
+
+      # Add the given source to +Gemfile+
       #
-      #   log :gemfile, message
+      # If block is given, gem entries in block are wrapped into the source group.
       #
-      #   options.each do |option, value|
-      #     parts << "#{option}: #{quote(value)}"
+      #   add_source "http://gems.github.com/"
+      #
+      #   add_source "http://gems.github.com/" do
+      #     gem "rspec"
+      #   end
+      def add_source(source, options = {}, &block)
+        log :source, source
+
+        in_root do
+          if block
+            append_file "Gemfile", "\nsource #{quote(source)} do", force: true
+            @in_group = true
+            instance_eval(&block)
+            @in_group = false
+            append_file "Gemfile", "\nend\n", force: true
+          else
+            prepend_file "Gemfile", "source #{quote(source)}\n", verbose: false
+          end
+        end
+      end
+
+      # Adds a line inside the Application class for <tt>config/application.rb</tt>.
+      #
+      # If options <tt>:env</tt> is specified, the line is appended to the corresponding
+      # file in <tt>config/environments</tt>.
+      #
+      #   environment do
+      #     "config.action_controller.asset_host = 'cdn.provider.com'"
       #   end
       #
-      #   in_root do
-      #     str = "gem #{parts.join(", ")}"
-      #     str = "  " + str if @in_group
-      #     str = "\n" + str
-      #     append_file "Gemfile", str, verbose: false
+      #   environment(nil, env: "development") do
+      #     "config.action_controller.asset_host = 'localhost:3000'"
       #   end
-      # end
+      def environment(data = nil, options = {})
+        sentinel = "class Application < Charyf::Application\n"
+        env_file_sentinel = "Charyf.application.configure do\n"
+        data ||= yield if block_given?
+
+        in_root do
+          if options[:env].nil?
+            inject_into_file "config/application.rb", optimize_indentation(data, 4), after: sentinel, verbose: false
+          else
+            Array(options[:env]).each do |env|
+              inject_into_file "config/environments/#{env}.rb", optimize_indentation(data, 2), after: env_file_sentinel, verbose: false
+            end
+          end
+        end
+      end
+
+      alias :application :environment
+
+      # Run a command in git.
       #
-      # # Wraps gem entries inside a group.
-      # #
-      # #   gem_group :development, :test do
-      # #     gem "rspec"
-      # #   end
-      # def gem_group(*names, &block)
-      #   name = names.map(&:inspect).join(", ")
-      #   log :gemfile, "group #{name}"
-      #
-      #   in_root do
-      #     append_file "Gemfile", "\ngroup #{name} do", force: true
-      #
-      #     @in_group = true
-      #     instance_eval(&block)
-      #     @in_group = false
-      #
-      #     append_file "Gemfile", "\nend\n", force: true
-      #   end
-      # end
-      #
-      # # Add the given source to +Gemfile+
-      # #
-      # # If block is given, gem entries in block are wrapped into the source group.
-      # #
-      # #   add_source "http://gems.github.com/"
-      # #
-      # #   add_source "http://gems.github.com/" do
-      # #     gem "rspec"
-      # #   end
-      # def add_source(source, options = {}, &block)
-      #   log :source, source
-      #
-      #   in_root do
-      #     if block
-      #       append_file "Gemfile", "\nsource #{quote(source)} do", force: true
-      #       @in_group = true
-      #       instance_eval(&block)
-      #       @in_group = false
-      #       append_file "Gemfile", "\nend\n", force: true
-      #     else
-      #       prepend_file "Gemfile", "source #{quote(source)}\n", verbose: false
-      #     end
-      #   end
-      # end
-      #
-      # # Adds a line inside the Application class for <tt>config/application.rb</tt>.
-      # #
-      # # If options <tt>:env</tt> is specified, the line is appended to the corresponding
-      # # file in <tt>config/environments</tt>.
-      # #
-      # #   environment do
-      # #     "config.action_controller.asset_host = 'cdn.provider.com'"
-      # #   end
-      # #
-      # #   environment(nil, env: "development") do
-      # #     "config.action_controller.asset_host = 'localhost:3000'"
-      # #   end
-      # def environment(data = nil, options = {})
-      #   sentinel = "class Application < Charyf::Application\n"
-      #   env_file_sentinel = "Charyf.application.configure do\n"
-      #   data ||= yield if block_given?
-      #
-      #   in_root do
-      #     if options[:env].nil?
-      #       inject_into_file "config/application.rb", optimize_indentation(data, 4), after: sentinel, verbose: false
-      #     else
-      #       Array(options[:env]).each do |env|
-      #         inject_into_file "config/environments/#{env}.rb", optimize_indentation(data, 2), after: env_file_sentinel, verbose: false
-      #       end
-      #     end
-      #   end
-      # end
-      #
-      # alias :application :environment
-      #
-      # # Run a command in git.
-      # #
-      # #   git :init
-      # #   git add: "this.file that.rb"
-      # #   git add: "onefile.rb", rm: "badfile.cxx"
-      # def git(commands = {})
-      #   if commands.is_a?(Symbol)
-      #     run "git #{commands}"
-      #   else
-      #     commands.each do |cmd, options|
-      #       run "git #{cmd} #{options}"
-      #     end
-      #   end
-      # end
-      #
-      # # Create a new file in the <tt>vendor/</tt> directory. Code can be specified
-      # # in a block or a data string can be given.
-      # #
-      # #   vendor("sekrit.rb") do
-      # #     sekrit_salt = "#{Time.now}--#{3.years.ago}--#{rand}--"
-      # #     "salt = '#{sekrit_salt}'"
-      # #   end
-      # #
-      # #   vendor("foreign.rb", "# Foreign code is fun")
-      # def vendor(filename, data = nil)
-      #   log :vendor, filename
-      #   data ||= yield if block_given?
-      #   create_file("vendor/#{filename}", optimize_indentation(data), verbose: false)
-      # end
-      #
+      #   git :init
+      #   git add: "this.file that.rb"
+      #   git add: "onefile.rb", rm: "badfile.cxx"
+      def git(commands = {})
+        if commands.is_a?(Symbol)
+          run "git #{commands}"
+        else
+          commands.each do |cmd, options|
+            run "git #{cmd} #{options}"
+          end
+        end
+      end
+
       # # Create a new file in the <tt>lib/</tt> directory. Code can be specified
       # # in a block or a data string can be given.
       # #
@@ -165,7 +153,7 @@ module Charyf
       #   data ||= yield if block_given?
       #   create_file("lib/#{filename}", optimize_indentation(data), verbose: false)
       # end
-      #
+
       # # Create a new +Rakefile+ with the provided code (either in a block or a string).
       # #
       # #   rakefile("bootstrap.rake") do
@@ -186,7 +174,7 @@ module Charyf
       #   data ||= yield if block_given?
       #   create_file("lib/tasks/#{filename}", optimize_indentation(data), verbose: false)
       # end
-      #
+
       # # Create a new initializer with the provided code (either in a block or a string).
       # #
       # #   initializer("globals.rb") do
@@ -218,31 +206,6 @@ module Charyf
       #   in_root {run_ruby_script("bin/charyf generate #{what} #{argument}", verbose: false)}
       # end
       #
-      # # Runs the supplied rake task (invoked with 'rake ...')
-      # #
-      # #   rake("db:migrate")
-      # #   rake("db:migrate", env: "production")
-      # #   rake("gems:install", sudo: true)
-      # #   rake("gems:install", capture: true)
-      # def rake(command, options = {})
-      #   execute_command :rake, command, options
-      # end
-      #
-      # # Runs the supplied rake task (invoked with 'charyf ...')
-      # #
-      # #   charyf_command("gems:install", sudo: true)
-      # #   charyf_command("gems:install", capture: true)
-      # def charyf_command(command, options = {})
-      #   charyf_command :charyf, command, options
-      # end
-      #
-      # # Reads the given file at the source root and prints it in the console.
-      # #
-      # #   readme "README"
-      # def readme(path)
-      #   log File.read(find_in_source_paths(path))
-      # end
-      #
       # Registers a callback to be executed after bundle and spring binstubs
       # have run.
       #
@@ -252,20 +215,21 @@ module Charyf
       def after_bundle(&block)
         @after_bundle_callbacks << block
       end
-      #
-      # private
-      #
-      # # Define log for backwards compatibility. If just one argument is sent,
-      # # invoke say, otherwise invoke say_status. Differently from say and
-      # # similarly to say_status, this method respects the quiet? option given.
-      # def log(*args) # :doc:
-      #   if args.size == 1
-      #     say args.first.to_s unless options.quiet?
-      #   else
-      #     args << (behavior == :invoke ? :green : :red)
-      #     say_status(*args)
-      #   end
-      # end
+
+      private
+
+      # Define log for backwards compatibility. If just one argument is sent,
+      # invoke say, otherwise invoke say_status. Differently from say and
+      # similarly to say_status, this method respects the quiet? option given.
+      def log(*args) # :doc:
+        if args.size == 1
+          say args.first.to_s unless options.quiet?
+        else
+          args << (behavior == :invoke ? :green : :red)
+          say_status(*args)
+        end
+      end
+
       #
       # # Runs the supplied command using either "rake ..." or "charyf ..."
       # # based on the executor parameter provided.
@@ -288,18 +252,18 @@ module Charyf
       #     name
       #   end
       # end
-      #
-      # # Surround string with single quotes if there is no quotes.
-      # # Otherwise fall back to double quotes
-      # def quote(value) # :doc:
-      #   return value.inspect unless value.is_a? String
-      #
-      #   if value.include?("'")
-      #     value.inspect
-      #   else
-      #     "'#{value}'"
-      #   end
-      # end
+
+      # Surround string with single quotes if there is no quotes.
+      # Otherwise fall back to double quotes
+      def quote(value) # :doc:
+        return value.inspect unless value.is_a? String
+
+        if value.include?("'")
+          value.inspect
+        else
+          "'#{value}'"
+        end
+      end
       #
       # # Returns optimized string with indentation
       # def optimize_indentation(value, amount = 0) # :doc:

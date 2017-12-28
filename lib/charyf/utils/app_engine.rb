@@ -7,15 +7,18 @@ module Charyf
 
     generators do
       require_relative 'generators/app/app_generator'
-      require_relative 'generators/test/test_generator'
+      require_relative 'generators/skill/skill_generator'
+      require_relative 'generators/intents/intents_generator'
+
+      require_relative 'generators/dummy/dummy_generator'
     end
 
-    # Load Rails generators and invoke the registered hooks.
-    # Check <tt>Rails::Railtie.generators</tt> for more info.
+    # Load Charyf generators and invoke the registered hooks.
+    # Check <tt>Charyf::Extension.generators</tt> for more info.
     def load_generators(app = self)
       require_relative 'generators'
-      run_generators_blocks(app)
       Charyf::Generators.configure!(app.config.generators)
+      run_generators_blocks(app)
       self
     end
 

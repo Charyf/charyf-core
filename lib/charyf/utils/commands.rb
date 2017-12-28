@@ -5,7 +5,8 @@ require_relative 'command'
 aliases = {
     'c' => 'console',
     's' => 'server',
-    'g' => 'generate'
+    'g' => 'generate',
+    'd' => 'destroy'
 }
 
 command = ARGV.shift

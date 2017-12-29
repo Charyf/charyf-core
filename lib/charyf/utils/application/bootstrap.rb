@@ -1,5 +1,6 @@
 require_relative '../app_engine'
 require_relative '../initializable'
+require_relative '../utils'
 require 'i18n'
 
 module Charyf
@@ -74,36 +75,29 @@ EOS
       end
 
       #
-      # Load user initializer files
-      #
-      initializer :run_initializers, group: :all do
-        # Load initializer files
-      end
-
-      #
       # Find all skills located in [YourApp]/app/skills/
       #
-      initializer :list_skills, group: :all do
-        skills = Dir.entries(self.config.root.join('app', 'skills'))
-                     .select {|entry| File.directory? self.config.root.join('app', 'skills', entry) and !(entry =='.' || entry == '..') }
-
-        skills.each do |skill_folder|
-          skill_path = self.config.root.join('app', 'skills', skill_folder, "#{skill_folder}.rb")
-
-          begin
-            require skill_path.to_s
-          rescue LoadError => e
-            raise SkillLoadError.new(e, skill_folder, skill_path)
-          end
+      initializer :load_skill_dir, group: :all do
+        # TODO revisit this
+        condition = lambda do |path|
+          in_root_dir = path.dirname.basename.to_s == 'skills'
+          contain_skill = Dir[path.dirname.join('**', '**')].any? { |p| p.include?('/controllers') } &&
+                          Dir[path.dirname.join('**', '**')].any? { |p| p.include?('/intents') }
+          return in_root_dir || contain_skill
         end
-      end
 
-      #
-      # Init all intent parsers
-      #
-      initializer :init_intent_parsers, group: :all do
-        Charyf.application.intent_processors.each do |processor|
-          processor.setup
+        # Require skill level files
+        Charyf::Utils.require_recursive self.config.root.join('app', 'skills'),
+                                        condition: condition
+
+        # Require controllers
+        Charyf::Skill.list.each do |skill_klass|
+          # Load initializers
+          root = skill_klass.skill_root
+
+          Dir[root.join('controllers', '**', '*.rb')].each do |controller|
+            require controller
+          end
         end
       end
 
@@ -137,31 +131,10 @@ EOS
       end
 
       #
-      # Init session processor
-      #
-      initializer :init_session_processor, group: :all do
-
-      end
-
-      #
-      # Init storage provider
-      #
-      initializer :init_storage_provider, group: :all do
-
-      end
-
-      #
-      # Init selected dispatcher
-      #
-      initializer :init_dispatcher, group: :all do
-
-      end
-
-      #
       # Load all user skill files
       #  - controllers
       #
-      initializer :load_skills, group: :all do
+      initializer :load_skill_controllers, group: :all do
 
         Charyf::Skill.list.each do |skill_klass|
 
@@ -172,6 +145,24 @@ EOS
             require controller
           end
 
+        end
+      end
+
+      #
+      # Load user initializer files
+      #
+      initializer :run_initializers, group: :all do
+        Dir[self.config.root.join('config', 'initializers', '**', '**.rb')].each do |initializer|
+          require initializer
+        end
+
+        Charyf::Skill.list.each do |skill_klass|
+          # Load initializers
+          root = skill_klass.skill_root
+
+          Dir[root.join('initializers', '**', '*.rb')].each do |initializer|
+            require initializer
+          end
         end
       end
 

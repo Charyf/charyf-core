@@ -1,0 +1,3 @@
+class <%= class_name -%> < Charyf::Skill::Base
+  skill_name '<%= class_name.gsub("::", " ") -%>'
+end

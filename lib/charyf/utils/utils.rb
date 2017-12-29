@@ -24,6 +24,20 @@ module Charyf
       Pathname.new File.realpath root
     end
 
+    # Requires files before recursion into directory
+    def self.require_recursive(path, condition: nil)
+      unless File.directory? path
+        require path if !condition || condition.call(path)
+      end
+
+      files = Dir[path.join('**')].select { |p| !File.directory?(p) }
+      dirs = Dir[path.join('**')].select { |p| File.directory?(p) }
+
+      (files + dirs).each do |item|
+        require_recursive Pathname.new(item), condition: condition
+      end
+    end
+
     sig_self [['Symbol', 'Array'], 'Array'], 'Hash',
     def self.create_action_filters(only = [], except = [])
       if only && only != :all && !only.empty? && except && !except.empty?

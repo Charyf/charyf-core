@@ -29,11 +29,6 @@ module Charyf
             raise Charyf::Utils::NotImplemented.new
           end
 
-          sig_self [], [nil],
-          def self.setup
-            # Override to run your setup
-          end
-
           sig_self ['Symbol'], 'Charyf::Engine::Intent::Processor::Base',
           def self.get_for(skill = nil)
             raise Charyf::Utils::NotImplemented.new

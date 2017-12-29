@@ -8,13 +8,13 @@ module Charyf
 
       module ClassMethods
 
-        sig ['String', 'Symbol'], ['Symbol'],
+        sig ['String', 'Symbol', 'NilClass'], ['Symbol'],
         def skill_name(name = nil)
           if name
             @_name = name.to_sym
           end
 
-          @_name || self.name.demodulize.to_sym
+          @_name || self.name.gsub('::', ' ')
         end
 
       end

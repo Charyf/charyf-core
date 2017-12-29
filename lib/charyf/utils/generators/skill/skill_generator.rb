@@ -1,47 +1,46 @@
 # frozen_string_literal: true
 
-require_relative '../app_base'
+require_relative '../named_base'
+
 require_relative '../../../support'
 
 module Charyf
   module Generators
-    class SkillGenerator < Base # :nodoc:
+    class SkillGenerator < NamedBase # :nodoc:
 
-      argument :skill_name, type: :string
+      check_class_collision
+      check_class_collision suffix: '::BaseController'
 
-      def skill
-        template 'skill.rb', "#{file_name}.rb"
+      def create_module_file
+        return if class_path.empty?
+        template 'module.rb', File.join('app/skills', module_path.join('/'), "#{module_file_name}.rb") if behavior == :invoke
+      end
+
+      def create_skill_file
+        template 'skill.rb', File.join('app/skills', class_path, "#{file_name}.rb")
       end
 
       def controller
-        empty_directory 'controllers'
+        empty_directory File.join('app/skills', skill_content_path, 'controllers')
 
-        inside 'controllers' do
-          template 'skill_controller.rb', "#{file_name}_controller.rb"
-        end
+        template 'controllers/skill_controller.rb', File.join('app/skills', skill_content_path, 'controllers', "#{file_name}_controller.rb")
       end
 
       def intents
-        empty_directory 'intents'
+        empty_directory File.join('app/skills', skill_content_path, 'intents')
       end
 
       def responses
-        empty_directory 'responses'
+        empty_directory File.join('app/skills', skill_content_path, 'responses')
 
-        inside 'responses' do
-          empty_directory file_name
-        end
+        empty_directory File.join('app/skills', skill_content_path, 'responses', file_name)
       end
 
+      def initializers
+        empty_directory File.join('app/skills', skill_content_path, 'initializers')
+      end
 
       hook_for :intents
-
-      private
-
-      def file_name
-        skill_name.demodulize.downcase
-      end
-
 
     end
   end

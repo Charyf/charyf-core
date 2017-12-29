@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../app_base'
+require_relative '../named_base'
 
 require_relative '../../generators'
 
@@ -8,19 +9,18 @@ require_relative '../../../support'
 
 module Charyf
   module Generators
-    class IntentsGenerator < Base # :nodoc:
-
-      argument :skill_name, type: :string
+    class IntentsGenerator < NamedBase # :nodoc:
 
       def try
-        intent_generators.each do |name|
-          names = generator_name(name).to_s.split(":")
+        intent_generators.each do |generator_name|
+          names = generator_name(generator_name).to_s.split(":")
           klass = Charyf::Generators.find_by_namespace(names.pop, names.any? && names.join(":"))
           if klass
-            say_status behavior, generator_name(name), :green
-            Charyf::Generators.invoke generator_name(name), [skill_name], behavior: behavior
+            say_status behavior, generator_name(generator_name), :green
+
+            invoke generator_name(generator_name), [name], options, behavior: behavior
           else
-            say_status behavior, "#{generator_name(name)} generator not found", :red
+            say_status behavior, "#{generator_name(generator_name)} generator not found", :red
           end
         end
       end

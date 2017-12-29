@@ -129,6 +129,10 @@ module Charyf
         !options[:skip_keeps]
       end
 
+      def lib?
+        options[:lib]
+      end
+
       class GemfileEntry < Struct.new(:name, :version, :comment, :options, :commented_out)
         def initialize(name, version, comment, options = {}, commented_out = false)
           super

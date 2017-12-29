@@ -112,9 +112,6 @@ module Charyf
         class_option :version, type: :boolean, aliases: "-v", group: :charyf,
                                desc: "Show Charyf version number and quit"
 
-      #   class_option :api, type: :boolean,
-      #                      desc: "Preconfigure smaller stack for API only apps"
-
         class_option :skip_bundle, type: :boolean, aliases: "-B", default: false,
                      desc: "Don't run bundle install"
 

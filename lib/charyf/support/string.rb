@@ -67,4 +67,28 @@ class String
     self
   end
 
+  def trim(str=nil)
+    return self.ltrim(str).rtrim(str)
+  end
+
+  def ltrim(str=nil)
+    if (!str)
+      return self.lstrip
+    else
+      escape = Regexp.escape(str)
+    end
+
+    return self.gsub(/^#{escape}+/, "")
+  end
+
+  def rtrim(str=nil)
+    if (!str)
+      return self.rstrip
+    else
+      escape = Regexp.escape(str)
+    end
+
+    return self.gsub(/#{escape}+$/, "")
+  end
+
 end

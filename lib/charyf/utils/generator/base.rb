@@ -154,6 +154,44 @@ module Charyf
 
       private
 
+      # Check whether the given class names are already taken by user
+      # application or Charyf.
+      def class_collisions(*class_names)
+        return unless behavior == :invoke
+
+        class_names.flatten.each do |class_name|
+          class_name = class_name.to_s
+          next if class_name.strip.empty?
+
+          # Split the class from its module nesting
+          nesting = class_name.split("::")
+          last_name = nesting.pop
+          last = extract_last_module(nesting)
+
+          if last && last.const_defined?(last_name, false)
+            raise Error, "The name '#{class_name}' is either already used in your application " \
+                           "or reserved by Charyf. Please choose an alternative and run "  \
+                           "this generator again."
+          end
+        end
+      end
+
+      # Takes in an array of nested modules and extracts the last module
+      def extract_last_module(nesting) # :doc:
+        nesting.inject(Object) do |last_module, nest|
+          break unless last_module.const_defined?(nest, false)
+          last_module.const_get(nest)
+        end
+      end
+
+      # Wrap block with namespace of current application
+      # if namespace exists and is not skipped
+      def module_namespacing(&block) # :doc:
+        content = capture(&block)
+        content = wrap_with_namespace(content) if namespaced?
+        concat(content)
+      end
+
       # Keep hooks configuration that are used on prepare_for_invocation.
       def self.hooks #:nodoc:
         @hooks ||= from_superclass(:hooks, {})

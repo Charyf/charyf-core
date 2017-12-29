@@ -38,12 +38,12 @@ module Charyf
 
       def extension_name(name = nil)
         @extension_name = name.to_s if name
-        @extension_name ||= generate_railtie_name(self.name)
+        @extension_name ||= generate_extension_name(self.name)
       end
 
       private
 
-      def generate_railtie_name(string)
+      def generate_extension_name(string)
         string.underscore.tr('/', '_')
       end
 
@@ -101,8 +101,8 @@ module Charyf
       @extension_namespace ||= self.class.parents.detect { |n| n.respond_to?(:extension_namespace) }
     end
 
-    # This is used to create the <tt>config</tt> object on Railties, an instance of
-    # Railtie::Configuration, that is used by Railties and Application to store
+    # This is used to create the <tt>config</tt> object on Extensions, an instance of
+    # Extension::Configuration, that is used by Extensions and Application to store
     # related configuration.
     def config
       @config ||= Charyf::Extension::Configuration.new

@@ -9,8 +9,6 @@ module Charyf
       require_relative 'generators/app/app_generator'
       require_relative 'generators/skill/skill_generator'
       require_relative 'generators/intents/intents_generator'
-
-      require_relative 'generators/dummy/dummy_generator'
     end
 
     # Load Charyf generators and invoke the registered hooks.

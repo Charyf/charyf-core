@@ -5,3 +5,13 @@
 #
 # Here you can list requires to all libraries that need to be present at boot time
 # Typically all charyf components like intent processors and memory providers
+
+# Require storage provider
+require <%= storage_details[:require] -%>
+
+
+# Require intent processors
+<% intents_details.values.each do |details| -%>
+require <%= details[:require] -%>
+<% end -%>
+

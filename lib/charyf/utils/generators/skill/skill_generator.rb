@@ -23,7 +23,7 @@ module Charyf
       def controller
         empty_directory File.join('app/skills', skill_content_path, 'controllers')
 
-        template 'controllers/skill_controller.rb', File.join('app/skills', skill_content_path, 'controllers', "#{file_name}_controller.rb")
+        template 'controllers/skill_controller.rb', File.join('app/skills', skill_content_path, 'controllers', 'base_controller.rb')
       end
 
       def intents
@@ -33,7 +33,7 @@ module Charyf
       def responses
         empty_directory File.join('app/skills', skill_content_path, 'responses')
 
-        empty_directory File.join('app/skills', skill_content_path, 'responses', file_name)
+        empty_directory File.join('app/skills', skill_content_path, 'responses', 'base')
       end
 
       def initializers

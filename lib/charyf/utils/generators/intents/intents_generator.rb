@@ -28,7 +28,7 @@ module Charyf
       private
 
       def intent_generators
-        Charyf::Generators.options[:charyf][:enabled_intents]
+        Charyf::Generators.options[:charyf][:intent_generators]
       end
 
       def generator_name(intent_processor_name)

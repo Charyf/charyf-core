@@ -15,7 +15,7 @@ module Charyf
 
     DEFAULT_OPTIONS = {
         charyf: {
-            enabled_intents: [],
+            intent_generators: [],
             intents: true
         }
     }

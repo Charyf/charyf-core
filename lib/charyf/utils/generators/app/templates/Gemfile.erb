@@ -9,8 +9,9 @@ source 'https://rubygems.org'
 , <%= gem.options.map { |k,v|
   "#{k}: #{v.inspect}" }.join(', ') -%>
 <% end -%>
-<% end %>
 
+
+<% end %>
 group :development, :test do
   gem 'pry'
 <% if RUBY_ENGINE == 'ruby' -%>

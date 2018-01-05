@@ -6,6 +6,8 @@ require_relative '../generator/base'
 require_relative '../generators'
 require_relative '../../version'
 
+require_relative 'defaults'
+
 module Charyf
   module Generators
     module ActionMethods # :nodoc:
@@ -38,6 +40,16 @@ module Charyf
       end
 
       def self.add_shared_options_for(name)
+
+        class_option :intent_processors,   type: :array, aliases: "-ip", default: Defaults::SETTINGS[:intents],
+                                           desc: "Set of intent intent processors to be included in installation" + Defaults.intents_desc,
+                                           group: :strategies
+
+        class_option :storage_provider, type: :string, aliases: "-sp", default: Defaults::SETTINGS[:storage],
+                                           desc: "Storage provider to be installed by default." + Defaults.storage_desc,
+                                           group: :strategies
+
+
 
         class_option :skip_gemfile,        type: :boolean, default: false,
                                            desc: "Don't create a Gemfile"
@@ -86,7 +98,10 @@ module Charyf
       end
 
       def gemfile_entries # :doc:
-        [charyf_gemfile_entry].flatten.find_all(&@gem_filter)
+        [charyf_gemfile_entry,
+         intents_gemfile_entries,
+         storage_gemfile_entries,
+         @extra_entries].flatten.find_all(&@gem_filter)
       end
 
       def add_gem_entry_filter # :doc:
@@ -131,6 +146,17 @@ module Charyf
 
       def lib?
         options[:lib]
+      end
+
+      def intents_details
+        Defaults::INTENT_PROCESSORS.select { |ip| options[:intent_processors].include?(ip.to_s) }
+      end
+
+      def storage_details
+        storage = Defaults::STORAGE_PROVIDERS[options[:storage_provider].to_sym]
+        $stderr.puts "Unknown storage provider '#{options[:storage_provider]}'" unless storage
+
+        storage
       end
 
       class GemfileEntry < Struct.new(:name, :version, :comment, :options, :commented_out)
@@ -178,6 +204,18 @@ module Charyf
         else
           [GemfileEntry.version("charyf",
                             charyf_version_specifier)]
+        end
+      end
+
+      def intents_gemfile_entries
+        Defaults::INTENT_PROCESSORS.values.map do |details|
+          GemfileEntry.version(details[:gem], details[:gem_version], 'Intent processor [generated]')
+        end
+      end
+
+      def storage_gemfile_entries
+        Defaults::STORAGE_PROVIDERS.values.map do |details|
+          GemfileEntry.version(details[:gem], details[:gem_version], 'Storage provider [generated]')
         end
       end
 

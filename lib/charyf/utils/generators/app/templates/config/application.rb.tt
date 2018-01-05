@@ -15,16 +15,18 @@ module <%= app_const_base %>
     config.i18n.default_locale = :en
 
     # Processor
-    config.enabled_intent_processors = [:dummy]
+    config.enabled_intent_processors = <%= intents_details.keys -%>
+
+    # Storage
+    config.storage_provider = :<%= options[:storage_provider] -%>
 
     # Dispatcher
+    # No other supported dispatchers now
     # config.dispatcher = :default
 
     # Session
+    # Sessions are currently unsupported
     # config.dispatcher = :default
-
-    # Storage
-    config.storage_provider = :memory
 
   end
 end

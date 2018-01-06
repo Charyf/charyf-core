@@ -15,6 +15,7 @@ module Charyf
         intent_generators.each do |generator_name|
           names = generator_name(generator_name).to_s.split(":")
           klass = Charyf::Generators.find_by_namespace(names.pop, names.any? && names.join(":"))
+
           if klass
             say_status behavior, generator_name(generator_name), :green
 
@@ -28,7 +29,7 @@ module Charyf
       private
 
       def intent_generators
-        Charyf::Generators.options[:charyf][:intent_generators]
+        Charyf::Generators.options[:intents].keys.map(&:downcase)
       end
 
       def generator_name(intent_processor_name)

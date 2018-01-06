@@ -112,8 +112,19 @@ module Charyf
 
     protected
 
+    def run_generators_blocks(app) #:nodoc:
+      extensions.each { |r| r.run_generators_blocks(app) }
+      super
+    end
+
     def initializers
       Bootstrap.initializers_for(self)
+    end
+
+    private
+
+    def extensions
+      @extensions ||= Extensions.new
     end
 
   end

@@ -4,6 +4,7 @@ require 'thor/group'
 
 require_relative 'command/behavior'
 
+
 module Charyf
   module Generators
     include Charyf::Command::Behavior
@@ -15,7 +16,6 @@ module Charyf
 
     DEFAULT_OPTIONS = {
         charyf: {
-            intent_generators: [],
             intents: true
         }
     }

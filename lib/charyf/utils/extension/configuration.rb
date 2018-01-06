@@ -12,9 +12,9 @@ module Charyf
 
       # Holds generators configuration:
       def generators
-        @generators ||= Charyf::Configuration::Generators.new
+        @@generators ||= Charyf::Configuration::Generators.new
         yield(@generators) if block_given?
-        @generators
+        @@generators
       end
       #
       # # First configurable block to run. Called before any initializers are run.

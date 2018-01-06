@@ -21,9 +21,9 @@ module Charyf
       end
 
       def inherited(base)
-        # unless base.abstract?
-        subclasses << base
-        # end
+        unless base.abstract?
+          subclasses << base
+        end
       end
 
       def generators(&blk)

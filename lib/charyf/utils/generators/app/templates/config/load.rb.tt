@@ -7,11 +7,11 @@
 # Typically all charyf components like intent processors and memory providers
 
 # Require storage provider
-require <%= storage_details[:require] -%>
+require '<%= storage_details[:require] -%>'
 
 
 # Require intent processors
 <% intents_details.values.each do |details| -%>
-require <%= details[:require] -%>
+require '<%= details[:require] -%>'
 <% end -%>
 

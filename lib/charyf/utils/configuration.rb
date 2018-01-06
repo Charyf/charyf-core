@@ -28,7 +28,6 @@ module Charyf
         end
 
         if configuration
-          aliases = configuration.delete(:aliases)
           @options[namespace].merge!(configuration)
         end
       end

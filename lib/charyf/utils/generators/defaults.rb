@@ -10,9 +10,9 @@ module Charyf
 
       STORAGE_PROVIDERS = {
           memory: {
-              gem: 'memory-storage-charyf',
-              gem_version: ['>= 0.2'],
-              require: 'memory-charyf',
+              gem: 'charyf-memory-storage',
+              gem_version: ['>= 0.1'],
+              require: 'charyf/memory_storage',
               desc: <<-EOM
 Memory storage does not provide permanent storage as the contract may require
 but delivers enough capabilities for development and testing.

@@ -1,3 +1,5 @@
+# Charyf
+
 Charyf (as **Cha**tbot **r**ub**y** **f**ramework) is a modular chatbot framework library.  
 The main purpose is to provide functional and easy to use way to define intents, responses and to model the conversation.
 

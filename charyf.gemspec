@@ -9,9 +9,9 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Richard Ludvigh']
   spec.email         = ['richard.ludvigh@gmail.com']
 
-  spec.summary       = %q{Summary is here}
+  spec.summary       = 'Your favorite modular chatbot ruby framework'
   spec.description   = spec.summary
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.homepage      = 'https://github.com/Charyf/charyf-core'
   spec.license       = 'MIT'
 
   spec.required_ruby_version = '>= 2.1'

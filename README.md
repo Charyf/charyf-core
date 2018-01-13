@@ -1,39 +1,16 @@
-# Charyf
+Charyf (as **Cha**tbot **r**ub**y** **f**ramework) is a modular chatbot framework library.  
+The main purpose is to provide functional and easy to use way to define intents, responses and to model the conversation.
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/charyf`. To experiment with that code, run `bin/console` for an interactive prompt.
+Charyf isolates developers from internals such as routing, dispatching, rendering and handling sessions, to maintain focus on the application logic and the dialogue flow.
 
-TODO: Delete this and the text above, and describe your gem
 
-## Installation
+For more information about using charyf, continue to [Getting Started](https://github.com/Charyf/charyf-core/wiki/Getting-Started)
 
-Add this line to your application's Gemfile:
+***
 
-```ruby
-gem 'charyf'
-```
+**Charyf** is still in early stages of development. Be aware that current version still has limited features and may contain unidentified bugs.
 
-And then execute:
+To read more about roadmap continue to [Roadmap](https://github.com/Charyf/charyf-core/wiki/Roadmap)  
+To report an issue follow steps in [Reporting an issue](https://github.com/Charyf/charyf-core/wiki/Reporting-an-issue)
 
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install charyf
-
-## Usage
-
-TODO: Write usage instructions here
-
-## Development
-
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
-
-## Contributing
-
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/charyf.
-
-## License
-
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+Continue to [wiki](https://github.com/Charyf/charyf-core/wiki)

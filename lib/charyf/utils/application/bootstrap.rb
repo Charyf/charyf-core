@@ -50,6 +50,11 @@ EOS
         end
       end
 
+      initializer :set_load_paths, group: :all do
+        libdir = File.expand_path(self.config.root.join('lib'))
+        $LOAD_PATH.unshift(libdir) unless $LOAD_PATH.include?(libdir)
+      end
+
       #
       # Loads I18N
       #

@@ -1,2 +1,10 @@
 class <%= "#{class_name}::BaseController" -%> < SkillController
+
+  def example
+    msg = "I am an example response for skill '<%= class_name.gsub("::", " ") -%>'"
+    msg << "\nFind me in #{__FILE__}"
+
+    reply(text: msg)
+  end
+
 end

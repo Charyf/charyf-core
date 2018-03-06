@@ -20,5 +20,31 @@ module Charyf
       self
     end
 
+    def start_interfaces
+      Charyf::Interface.known.map(&:start)
+    end
+
+    def start_pipeline
+
+      begin
+        loop do
+          request = Charyf::Pipeline.dequeue
+
+          Charyf.application.dispatcher.new.dispatch(request)
+        end
+
+      rescue Exception => e
+        if e.is_a? Interrupt
+          puts "\n\nExiting ...\n"
+        else
+          puts e
+          puts e.backtrace
+          Charyf.application.config.error_handlers.handle_exception(e)
+          raise e
+        end
+      end
+
+    end
+
   end
 end

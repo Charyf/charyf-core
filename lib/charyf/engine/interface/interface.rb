@@ -8,18 +8,33 @@ module Charyf
     class Base
 
       include Charyf::Strategy
-      def self.base
-        Base
-      end
 
-      sig_self [], 'Charyf::Engine::Dispatcher::Base',
-      def self.dispatcher
-        Charyf.application.dispatcher.new
-      end
+      class << self
+        def base
+          Base
+        end
 
-      sig_self ['String', 'Charyf::Engine::Response'], nil,
-      def self.reply(conversation_id, response)
-        raise Charyf::Utils::NotImplemented.new
+        def dispatcher
+          Charyf::Pipeline
+        end
+
+        def reply(conversation_id, response)
+          raise Charyf::Utils::NotImplemented.new
+        end
+
+        def start
+          raise Charyf::Utils::NotImplemented.new
+        end
+
+        def stop
+          raise Charyf::Utils::NotImplemented.new
+        end
+
+        # If stop does not finish till required timeout
+        # Terminate is called
+        def terminate
+          raise Charyf::Utils::NotImplemented.new
+        end
       end
 
     end

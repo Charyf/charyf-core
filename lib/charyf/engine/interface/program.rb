@@ -11,6 +11,18 @@ module Charyf
 
       attr_reader :handler, :conversation_id
 
+      def self.start
+        # NOP
+      end
+
+      def self.stop
+        # NOP
+      end
+
+      def self.terminate
+        # NOP
+      end
+
       sig_self ['String', 'Charyf::Engine::Response'], nil,
       def self.reply(conversation_id, response)
         interface = _interfaces[conversation_id]

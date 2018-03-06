@@ -41,7 +41,7 @@ module Charyf
 
     end
 
-    def initialize!(group: :default)
+    def initialize!(group = :default)
       return self if @initialized
       @initialized = true
 
@@ -118,7 +118,8 @@ module Charyf
     end
 
     def initializers
-      Bootstrap.initializers_for(self)
+      Bootstrap.initializers_for(self) +
+          (extensions.map { |e| e.class.initializers_for(self) }.flatten)
     end
 
     private

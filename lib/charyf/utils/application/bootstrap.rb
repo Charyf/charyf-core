@@ -8,29 +8,6 @@ module Charyf
     # noinspection RubyResolve
     module Bootstrap
 
-      class SkillLoadError < StandardError
-        def initialize(e, skill_name, skill_path)
-          super(e)
-
-          @_name = skill_name
-          @_path = skill_path.dirname
-        end
-
-        def message
-          _message + super
-        end
-
-        def _message
-          <<-EOS
-          
-          Unable to load skill #{@_name}
-          Expected to find: '#{@_name}.rb'
-                Located at: '#{@_path}'
-
-EOS
-        end
-      end
-
       include Charyf::Initializable
 
       class InitializationError < StandardError; end
@@ -107,35 +84,6 @@ EOS
       end
 
       #
-      # Load all intents
-      #
-      initializer :load_skill_intents, groups: :all do
-        # Require Skill intents
-        Charyf::Skill.list.each do |skill_klass|
-          Dir[skill_klass.routing_source_dir.join('**', '*.rb')].each do |file|
-            require file
-          end
-        end
-
-        Charyf::Skill.list.each do |skill_klass|
-          skill_name = skill_klass.skill_name
-
-          Charyf.application.intent_processors.each do |processor|
-            # Public routing
-            skill_klass._public_routing(processor.strategy_name).each do |block|
-              processor.get_global.load skill_name, block
-            end
-
-            # Private routing
-            skill_klass._private_routing(processor.strategy_name).each do |block|
-              processor.get_for(skill_name).load skill_name, block
-            end
-
-          end
-        end
-      end
-
-      #
       # Load all user skill files
       #  - controllers
       #
@@ -167,6 +115,35 @@ EOS
 
           Dir[root.join('initializers', '**', '*.rb')].each do |initializer|
             require initializer
+          end
+        end
+      end
+
+      #
+      # Load all intents
+      #
+      initializer :load_skill_intents, groups: :all do
+        # Require Skill intents
+        Charyf::Skill.list.each do |skill_klass|
+          Dir[skill_klass.routing_source_dir.join('**', '*.rb')].each do |file|
+            require file
+          end
+        end
+
+        Charyf::Skill.list.each do |skill_klass|
+          skill_name = skill_klass.skill_name
+
+          Charyf.application.intent_processors.each do |processor|
+            # Public routing
+            skill_klass._public_routing(processor.strategy_name).each do |block|
+              processor.get_global.load skill_name, block
+            end
+
+            # Private routing
+            skill_klass._private_routing(processor.strategy_name).each do |block|
+              processor.get_for(skill_name).load skill_name, block
+            end
+
           end
         end
       end

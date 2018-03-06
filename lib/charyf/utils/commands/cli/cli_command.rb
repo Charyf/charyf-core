@@ -59,6 +59,10 @@ module Charyf
     end
 
     def detect(utterance)
+      if !utterance || utterance.empty?
+        return
+      end
+
       if utterance[0] == ':'
         process_command utterance[1..-1]
         return
@@ -68,6 +72,8 @@ module Charyf
       request.text = utterance
 
       @interface.process(request)
+
+      process_single_request!
     end
 
 
@@ -88,6 +94,10 @@ module Charyf
       # TODO - dependency on bad "package"
       @interface = Charyf::Interface::Program.create("cli_#{Process.pid}", Proc.new { |response| cli_print(response.text) })
       $stderr.puts "Created program interface for process ##{Process.pid}."
+    end
+
+    def process_single_request!
+      Charyf.application.dispatcher.new.dispatch(Charyf::Pipeline.dequeue)
     end
 
   end

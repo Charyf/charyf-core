@@ -21,6 +21,7 @@ module Charyf
         require_application_and_environment!
 
         start_interfaces!
+
         start_pipeline!
 
       end

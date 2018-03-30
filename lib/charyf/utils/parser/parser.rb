@@ -1,15 +1,16 @@
 require_relative '../../support/string'
-require_relative '../strategy'
+require_relative '../strategy/base_class'
+require_relative '../strategy/owner_class'
 
 module Charyf
   module Utils
     module Parser
+
+      extend Charyf::Strategy::OwnerClass
+
       class Base
 
-        include Charyf::Strategy
-        def self.base
-          Base
-        end
+        include Charyf::Strategy::BaseClass
 
         # TODO sig
         def self.normalize(text, remove_articles: true)
@@ -17,14 +18,6 @@ module Charyf
         end
 
       end # End of base
-
-      def self.known
-        Base.known
-      end
-
-      def self.list
-        Base.list
-      end
 
       # TODO sig
       def self.get(language)

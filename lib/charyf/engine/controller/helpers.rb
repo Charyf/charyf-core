@@ -10,15 +10,19 @@ module Charyf
       end # End of ClassMethods
 
       def controller_name
-        context.controller_name
+        context.routing.controller
       end
 
       def action_name
-        context.action_name
+        context.routing.action
       end
 
       def skill_name
-        context.skill_name
+        skill.skill_name
+      end
+
+      def skill
+        context.routing.skill_class_name.nil? ? nil : context.routing.skill_class_name.constantize
       end
 
       def request

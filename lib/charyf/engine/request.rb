@@ -4,27 +4,15 @@ module Charyf
 
       attr_accessor :text
 
+      attr_reader :referer, :conversation_id, :message_id
+
+
       # Module -> anything of type Charyf::Interface::Base
-      sig ['Module', 'String'], nil,
-      def initialize(referer, conversation_id)
+      # sig ['Module', 'String'], nil,
+      def initialize(referer, conversation_id, message_id)
         @referer = referer
         @conversation_id = conversation_id
-      end
-
-      # Module -> Charyf::Interface::Base
-      sig [], 'Module',
-      def referer
-        @referer
-      end
-
-      sig [], 'String',
-      def conversation_id
-        @conversation_id
-      end
-
-      sig [], 'String',
-      def id
-        @referer.strategy_name.to_s + '_#_' + @conversation_id
+        @message_id = message_id
       end
 
     end

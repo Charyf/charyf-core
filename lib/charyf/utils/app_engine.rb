@@ -36,6 +36,8 @@ module Charyf
       rescue Exception => e
         if e.is_a? Interrupt
           puts "\n\nExiting ...\n"
+        elsif e.message =~ /No live threads left./
+          raise "No interfaces are available. The server will now exit."
         else
           puts e
           puts e.backtrace

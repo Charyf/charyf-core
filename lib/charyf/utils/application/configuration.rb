@@ -9,7 +9,7 @@ module Charyf
 
       attr_accessor :console
 
-      attr_accessor :session_processor, :storage_provider, :dispatcher
+      attr_accessor :session_processor, :storage_provider, :dispatcher, :router
       attr_accessor :enabled_intent_processors
 
       def initialize(root)
@@ -26,22 +26,22 @@ module Charyf
         Charyf::ErrorHandlers
       end
 
-      sig [], ['Symbol', 'NilClass'],
+      def router
+        (@router || 'default').to_sym
+      end
+
       def dispatcher
         (@dispatcher || 'default').to_sym
       end
 
-      sig [], ['Symbol'],
       def session_processor
         (@session_processor || 'default').to_sym
       end
 
-      sig [], [Array],
       def enabled_intent_processors
         (@enabled_intent_processors || []).map(&:to_sym)
       end
 
-      sig [], ['Symbol', 'NilClass'],
       def storage_provider
         @storage_provider ? @storage_provider.to_sym : nil
       end

@@ -110,6 +110,18 @@ module Charyf
       klass
     end
 
+    def routing
+      klass = Charyf::Engine::Routing.list[config.router]
+
+      raise Charyf::Utils::InvalidConfiguration.new("No router with name '#{config.router}' found") unless klass
+
+      klass
+    end
+
+    def routes
+      @routes ||= routing.new
+    end
+
     protected
 
     def run_generators_blocks(app) #:nodoc:

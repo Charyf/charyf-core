@@ -7,11 +7,7 @@ module Charyf
 
         strategy_name :default
 
-        def self.setup
-
-        end
-
-        def dispatch(request)
+        def dispatch_internal(request)
           # Find if session exist for this request
 
           context = Charyf::Engine::Context.new
@@ -22,13 +18,11 @@ module Charyf
 
           # Get intents
           intents = intent_processors.collect do |processor_klass|
-            processor = processor_klass.get_for(context.session ? context.session.skill : nil)
+            processor = processor_klass.instance
 
             processor.determine(
                 request
             )
-          end.collect do |intent|
-            [intent, intent.alternatives].flatten
           end.flatten.sort_by do |intent|
             intent.confidence
           end.reverse
@@ -38,19 +32,15 @@ module Charyf
 
           # Return best match with alternatives
           if best_match
-            context.intent = Charyf::Engine::Intent.new(
-                best_match.skill,
-                best_match.controller,
-                best_match.action,
-                best_match.confidence,
-                best_match.matches,
-                intents
-            )
-
             context.intent = best_match
+            context.alternative_intents = intents
           end
 
-          # TODO
+          context.routing = routes.process(context)
+
+          # Freeze -> #TODO deep freeze
+          context.freeze
+
           spawn_controller(context)
         end
 

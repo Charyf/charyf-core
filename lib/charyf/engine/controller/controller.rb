@@ -1,3 +1,5 @@
+require 'securerandom'
+
 require_relative '../../utils'
 
 require_relative '../response'
@@ -34,7 +36,7 @@ module Charyf
       )
 
         if text.blank? && html.blank?
-          render ||= intent.action
+          render ||= action_name
           ensure_responses_for(render)
         end
 
@@ -43,8 +45,9 @@ module Charyf
           html ||= render_html_response(render)
         end
 
-        response = Charyf::Engine::Response.new(text, html)
-
+        response = Charyf::Engine::Response.new(conversation_id, SecureRandom.hex)
+        response.text = text
+        response.html = html
 
         Charyf.logger.flow_response("[FLOW] Replying on request [#{request.inspect}]" +
                                     " with [#{response.inspect}]"

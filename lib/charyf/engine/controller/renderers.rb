@@ -32,9 +32,9 @@ module Charyf
 
       # TODO sig
       def response_folder
-        return nil if skill_name.to_s.blank?
+        return nil if skill.nil?
 
-        return skill_name.to_s.constantize.skill_root.join('responses', controller_path)
+        return skill.skill_root.join('responses', controller_path)
       end
 
       def ensure_responses_for(action)

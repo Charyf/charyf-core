@@ -3,37 +3,18 @@ module Charyf
     class Response
 
       attr_accessor :text, :html
+      attr_reader :conversation_id, :reply_message_id
 
-      sig [['String', 'NilClass'], ['String', 'NilClass']], nil,
-      def initialize(text, html)
-        @text = text
-        @html = html
+      def initialize(conversation_id, reply_message_id)
+        @text = nil
+        @html = nil
+
+        @conversation_id = conversation_id
+        @reply_message_id = reply_message_id
       end
 
       def empty?
         text.blank? && html.blank?
-      end
-
-      # Attr methods for type-checking
-
-      sig ['String', 'NilClass'], ['String', 'NilClass'],
-      def text=(text)
-        @text = text
-      end
-
-      sig [], ['String', 'NilClass'],
-      def text
-        @text
-      end
-
-      sig ['String', 'NilClass'], ['String', 'NilClass'],
-      def html=(html)
-        @html = html
-      end
-
-      sig [], ['String', 'NilClass'],
-      def html
-        @html
       end
 
     end

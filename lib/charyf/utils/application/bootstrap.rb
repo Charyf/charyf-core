@@ -25,11 +25,16 @@ module Charyf
         if FileTest.exists?(env_file)
           require env_file
         end
+
+        require self.config.root.join('config', 'routes.rb')
       end
 
       initializer :set_load_paths, group: :all do
-        libdir = File.expand_path(self.config.root.join('lib'))
-        $LOAD_PATH.unshift(libdir) unless $LOAD_PATH.include?(libdir)
+        [
+            File.expand_path(self.config.root)
+        ].each do |libdir|
+          $LOAD_PATH.unshift(libdir) unless $LOAD_PATH.include?(libdir)
+        end
       end
 
       #
@@ -46,6 +51,7 @@ module Charyf
         Charyf.application.session_processor
         Charyf.application.intent_processors
         Charyf.application.dispatcher
+        Charyf.application.routing
       end
 
       #
@@ -71,21 +77,10 @@ module Charyf
         # Require skill level files
         Charyf::Utils.require_recursive self.config.root.join('app', 'skills'),
                                         condition: condition
-
-        # Require controllers
-        Charyf::Skill.list.each do |skill_klass|
-          # Load initializers
-          root = skill_klass.skill_root
-
-          Dir[root.join('controllers', '**', '*.rb')].each do |controller|
-            require controller
-          end
-        end
       end
 
       #
-      # Load all user skill files
-      #  - controllers
+      # Load skill controllers
       #
       initializer :load_skill_controllers, group: :all do
 
@@ -102,10 +97,26 @@ module Charyf
       end
 
       #
+      # Load skill initializers
+      #
+      initializer :initialize_skills, group: :all do
+        Charyf::Skill.list.each do |skill_klass|
+
+          # Load controllers
+          root = skill_klass.skill_root
+
+          Dir[root.join('initializers', '**', '*.rb')].each do |initializer|
+            require initializer
+          end
+
+        end
+      end
+
+      #
       # Load user initializer files
       #
       initializer :run_initializers, group: :all do
-        Dir[self.config.root.join('config', 'initializers', '**', '**.rb')].each do |initializer|
+        Dir[self.config.root.join('config', 'initializers', '**', '*.rb')].each do |initializer|
           require initializer
         end
 
@@ -115,35 +126,6 @@ module Charyf
 
           Dir[root.join('initializers', '**', '*.rb')].each do |initializer|
             require initializer
-          end
-        end
-      end
-
-      #
-      # Load all intents
-      #
-      initializer :load_skill_intents, groups: :all do
-        # Require Skill intents
-        Charyf::Skill.list.each do |skill_klass|
-          Dir[skill_klass.routing_source_dir.join('**', '*.rb')].each do |file|
-            require file
-          end
-        end
-
-        Charyf::Skill.list.each do |skill_klass|
-          skill_name = skill_klass.skill_name
-
-          Charyf.application.intent_processors.each do |processor|
-            # Public routing
-            skill_klass._public_routing(processor.strategy_name).each do |block|
-              processor.get_global.load skill_name, block
-            end
-
-            # Private routing
-            skill_klass._private_routing(processor.strategy_name).each do |block|
-              processor.get_for(skill_name).load skill_name, block
-            end
-
           end
         end
       end

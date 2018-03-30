@@ -16,8 +16,6 @@ module Charyf
         _pipeline.enq(request)
       end
 
-      alias_method 'dispatch', 'enqueue'
-
       private
 
       def _pipeline

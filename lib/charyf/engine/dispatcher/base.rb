@@ -6,23 +6,38 @@ require_relative '../request'
 module Charyf
   module Engine
     module Dispatcher
+
+      extend Charyf::Strategy::OwnerClass
+
       class Base
 
-        include Charyf::Strategy
-        def self.base
-          Base
-        end
+        include Charyf::Strategy::BaseClass
 
-        sig ['Charyf::Engine::Request'], nil,
         def dispatch(request)
+          status, response = dispatch_internal(request)
+
+          {
+              status: status,
+              response: response,
+              request: request
+          }
         end
 
-        def self.setup
-          # Do your setup here
-        end
+        def dispatch_async(request)
+          Charyf::Pipeline.enqueue request
 
+          {
+              status: :ASYNC,
+              request: request,
+              response: nil
+          }
+        end
 
         protected
+
+        def dispatch_internal(request)
+          raise Charyf::Utils::NotImplemented.new
+        end
 
         def self.intent_processors
           Charyf.application.intent_processors
@@ -30,6 +45,10 @@ module Charyf
 
         def self.session_processor
           Charyf.application.session_processor
+        end
+
+        def self.routes
+          Charyf.application.routes
         end
 
         def intent_processors
@@ -40,51 +59,48 @@ module Charyf
           self.class.session_processor
         end
 
+        def routes
+          self.class.routes
+        end
+
         sig ['Charyf::Engine::Context'], nil,
         def spawn_controller(context)
+
+          Charyf.logger.flow_request("[FLOW] Dispatching request [#{context.request.inspect}]" +
+                                      ", detected intent: [#{context.intent.inspect}]" +
+                                      ", session : [#{context.session.inspect}]"
+          )
+
+          controller = get_controller(context)
+
           begin
-            prepare_context context
-
-            Charyf.logger.flow_request("[FLOW] Dispatching request [#{context.request.inspect}]" +
-                                        ", detected intent: [#{context.intent.inspect}]" +
-                                        ", session : [#{context.session.inspect}]"
-            )
-
-            controller = get_controller(context)
-
             handle_before_actions(controller)
-            controller.send(context.action_name)
+            result = controller.send(get_action_name(context))
             handle_after_actions(controller)
+
+            return :OK, result
           rescue Exception => e
             # Dispatch the error to all error handlers
             Charyf.configuration.error_handlers.handle_exception(e)
-
             # Catch any error that may occur inside the user controller
-            controller.send(:reply, text: 'There was a problem processing your request. Check the logs please.')
+            # controller.send(:reply, text: 'There was a problem processing your request. Check the logs please.')
+
+            return :NOK, e
           end
 
         end
 
         private
 
-        def prepare_context(context)
-          context.intent ||= Charyf::Engine::Intent::UNKNOWN
-
-          context
-        end
-
         def get_controller(context)
-          controller_name = context.full_controller_name +  'Controller'
+          controller_name = context.routing.controller_class_name
 
-          Object.const_get(controller_name).new(context)
+          # Object.const_get(controller_name).new(context)
+          controller_name.constantize.new(context)
         end
 
         def get_action_name(context)
-          if context.session && context.session.action
-            return context.session.action
-          end
-
-          context.intent.action
+          context.routing.action
         end
 
         def handle_before_actions(controller)
@@ -107,15 +123,6 @@ module Charyf
         end
 
       end # End of Base.class
-
-      def self.known
-        Base.known
-      end
-
-      def self.list
-        Base.list
-      end
-
     end
   end
 end

@@ -4,13 +4,12 @@ module Charyf
   module Engine
     class Session
       module Processor
+
+        extend Charyf::Strategy::OwnerClass
+
         class Base
 
-          include Charyf::Strategy
-          def self.base
-            Base
-          end
-
+          include Charyf::Strategy::BaseClass
 
           sig ['Charyf::Engine::Request'], ['Charyf::Engine::Session', 'NilClass'],
           def process(request)
@@ -23,16 +22,6 @@ module Charyf
           end
 
         end
-
-
-        def self.known
-          Base.known
-        end
-
-        def self.list
-          Base.list
-        end
-
       end
     end
   end

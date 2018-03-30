@@ -1,14 +1,14 @@
-require_relative '../strategy'
+require_relative '../strategy/base_class'
 
 module Charyf
   module Utils
     module StorageProvider
+
+      extend Charyf::Strategy::OwnerClass
+
       class Base
 
-        include Charyf::Strategy
-        def self.base
-          Base
-        end
+        include Charyf::Strategy::BaseClass
 
         sig_self [['Module', 'String']], ['Charyf::Utils::StorageProvider::Base'],
         def self.get_for(klass)
@@ -31,14 +31,6 @@ module Charyf
         end
 
       end # End of Base
-
-      def self.known
-        Base.known
-      end
-
-      def self.list
-        Base.list
-      end
     end
   end
 end

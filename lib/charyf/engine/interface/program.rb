@@ -1,3 +1,5 @@
+require 'securerandom'
+
 require_relative 'interface'
 require_relative '../request'
 
@@ -63,7 +65,7 @@ module Charyf
 
       sig [], 'Charyf::Engine::Request',
       def request
-        Charyf::Engine::Request.new(self.class, conversation_id)
+        Charyf::Engine::Request.new(self.class, conversation_id, SecureRandom.hex)
       end
 
     end

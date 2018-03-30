@@ -5,20 +5,20 @@ require_relative '../dispatcher/base'
 
 module Charyf
   module Interface
+
+    extend Charyf::Strategy::OwnerClass
+
     class Base
 
-      include Charyf::Strategy
+      include Charyf::Strategy::BaseClass
 
       class << self
-        def base
-          Base
-        end
 
         def dispatcher
-          Charyf::Pipeline
+          Charyf.application.dispatcher.new
         end
 
-        def reply(conversation_id, response)
+        def reply(conversation_id, message_id, response)
           raise Charyf::Utils::NotImplemented.new
         end
 
@@ -37,14 +37,6 @@ module Charyf
         end
       end
 
-    end
-
-    def self.known
-      Base.known
-    end
-
-    def self.list
-      Base.list
     end
   end
 end

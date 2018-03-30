@@ -14,6 +14,9 @@ require_relative 'session/session'
 require_relative 'session/processors/processor'
 require_relative 'session/processors/default'
 
+require_relative 'routing/router'
+require_relative 'routing/default'
+
 require_relative 'skill/skill'
 
 require_relative 'charyf'

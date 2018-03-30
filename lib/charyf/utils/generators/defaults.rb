@@ -24,12 +24,21 @@ Should not be used on production environments as it is not persisted.
       INTENT_PROCESSORS = {
           adapt: {
               gem: 'adapt-charyf',
-              gem_version: ['>= 0.2'],
+              gem_version: ['>= 0.2.4'],
               require: 'adapt-charyf',
               desc: <<-EOM
-Ruby wrapper around python library from mycroft [adapt]
+Ruby wrapper around python library from mycroft [adapt]. Works offline.
 It uses building blocks as regexps or small expressions to define and determine intents.
 see more at: https://github.com/Charyf/charyf-adapt-processor
+              EOM
+          },
+          wit: {
+              gem: 'witai-charyf',
+              gem_version: ['>= 0.2'],
+              require: 'witai/charyf',
+              desc: <<-EOM
+Charyf wrapper around WIT.ai service. Utilizes powerful NLP (works online as service).
+Supports builtin entity tagging like datetimes, amounts, locations and more.
               EOM
           }
       }

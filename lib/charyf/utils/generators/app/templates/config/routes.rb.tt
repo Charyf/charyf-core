@@ -1,0 +1,6 @@
+Charyf.application.routes.draw do
+
+  # This is dont automatically, override to change
+  # route 'charyf/unknown', to: {skill: nil, controller: 'skill', action: 'unknown'}
+
+end

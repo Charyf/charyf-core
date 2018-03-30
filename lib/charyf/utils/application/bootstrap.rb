@@ -23,10 +23,10 @@ module Charyf
         env_file = self.config.root.join('config', 'environments', "#{Charyf.env}.rb")
 
         if FileTest.exists?(env_file)
-          require env_file
+          require env_file.to_s
         end
 
-        require self.config.root.join('config', 'routes.rb')
+        require self.config.root.join('config', 'routes.rb').to_s
       end
 
       initializer :set_load_paths, group: :all do

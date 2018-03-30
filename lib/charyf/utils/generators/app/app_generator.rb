@@ -80,6 +80,7 @@ module Charyf
           template "boot.rb"
           template "chapp.rb"
           template "load.rb"
+          template "routes.rb"
 
           directory "environments"
           empty_directory_with_keep_file "initializers"

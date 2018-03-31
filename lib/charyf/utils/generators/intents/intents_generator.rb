@@ -29,7 +29,7 @@ module Charyf
       private
 
       def intent_generators
-        Charyf::Generators.options[:intents].keys.map(&:downcase)
+        (Charyf::Generators.options[:intents] || {}).keys.map(&:downcase)
       end
 
       def generator_name(intent_processor_name)

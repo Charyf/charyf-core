@@ -1,3 +1,7 @@
+[![Code Climate](https://codeclimate.com/github/Charyf/charyf-core/badges/gpa.svg)](https://codeclimate.com/github/Charyf/charyf-core) 
+[![Test Coverage](https://codeclimate.com/github/Charyf/charyf-core/badges/coverage.svg)](https://codeclimate.com/github/Charyf/charyf-core/coverage) 
+[![Issue Count](https://codeclimate.com/github/Charyf/charyf-core/badges/issue_count.svg)](https://codeclimate.com/github/Charyf/charyf-core)
+
 # Charyf
 
 Charyf (as **Cha**tbot **r**ub**y** **f**ramework) is a modular chatbot framework library.  

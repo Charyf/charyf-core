@@ -5,4 +5,9 @@ class SkillController < Charyf::Controller::Base
     reply(text: "I am sorry, I can't help you with that.")
   end
 
+  def invalid
+    logger.warn("Unknown intent routing for request: #{request.inspect}")
+    reply(text: "Don't know where to route intent '#{intent.name}'")
+  end
+
 end

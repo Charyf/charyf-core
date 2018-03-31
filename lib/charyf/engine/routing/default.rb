@@ -21,13 +21,13 @@ module Charyf
 
         # Context -> Controller
         def process(context)
-          @routes[context.intent.name] || invalid
+          @routes[context.intent.name.downcase] || invalid
         end
 
         def route(intent, to: nil)
           raise InvalidRoute.new("route '#{intent}' missing to definition") if to.nil?
 
-          @routes[intent] = parse_target(to)
+          @routes[intent.downcase] = parse_target(to)
         end
 
         private

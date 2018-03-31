@@ -71,7 +71,14 @@ module Charyf
       request = @interface.request
       request.text = utterance
 
-      @interface.process(request)
+      res = @interface.process(request)
+
+      if res[:status] == :NOK && res[:response].is_a?(Exception)
+        e = res[:response]
+        puts ''
+        puts e.inspect
+        puts "\t" + e.backtrace.join("\n\t")
+      end
     end
 
 

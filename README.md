@@ -1,3 +1,5 @@
+[![Gem Version](https://badge.fury.io/rb/charyf.svg)](https://badge.fury.io/rb/charyf)
+
 [![Code Climate](https://codeclimate.com/github/Charyf/charyf-core/badges/gpa.svg)](https://codeclimate.com/github/Charyf/charyf-core) 
 [![Test Coverage](https://codeclimate.com/github/Charyf/charyf-core/badges/coverage.svg)](https://codeclimate.com/github/Charyf/charyf-core/coverage) 
 [![Issue Count](https://codeclimate.com/github/Charyf/charyf-core/badges/issue_count.svg)](https://codeclimate.com/github/Charyf/charyf-core)

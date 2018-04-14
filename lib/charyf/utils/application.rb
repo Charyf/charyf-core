@@ -103,13 +103,6 @@ module Charyf
       klass
     end
 
-    def parser
-      klass = Charyf::Utils::Parser.get(config.i18n.locale)
-      raise Charyf::Utils::InvalidConfiguration.new("No parser for locale '#{config.i18n.locale}' found") unless klass
-
-      klass
-    end
-
     def routing
       klass = Charyf::Engine::Routing.list[config.router]
 

@@ -1,6 +1,3 @@
-require_relative 'parser/parser'
-require_relative 'parser/en_parser'
-
 require_relative 'storage/provider'
 
 require_relative 'application'

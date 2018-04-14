@@ -45,16 +45,6 @@ module Charyf
       end
 
       #
-      # Validates that all required strategies are fulfilled and the application can load
-      #
-      initializer :validate_strategies, group: :all do
-        Charyf.application.session_processor
-        Charyf.application.intent_processors
-        Charyf.application.dispatcher
-        Charyf.application.routing
-      end
-
-      #
       # Load APP default files
       #
       initializer :load_defaults, group: :all do

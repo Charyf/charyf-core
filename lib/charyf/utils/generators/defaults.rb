@@ -24,7 +24,7 @@ Should not be used on production environments as it is not persisted.
       INTENT_PROCESSORS = {
           adapt: {
               gem: 'adapt-charyf',
-              gem_version: ['>= 0.2.4'],
+              gem_version: ['>= 0.3'],
               require: 'adapt-charyf',
               desc: <<-EOM
 Ruby wrapper around python library from mycroft [adapt]. Works offline.

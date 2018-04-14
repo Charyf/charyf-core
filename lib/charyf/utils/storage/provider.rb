@@ -1,4 +1,5 @@
 require_relative '../strategy/base_class'
+require_relative '../strategy/owner_class'
 
 module Charyf
   module Utils

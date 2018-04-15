@@ -21,7 +21,7 @@ module Charyf
     end
 
     def start_interfaces
-      Charyf::Interface.known.map(&:start)
+      Charyf.application.interfaces.map(&:start)
     end
 
     def start_pipeline

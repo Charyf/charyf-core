@@ -1,2 +1,8 @@
 Charyf.application.configure do
+  # You can override here any configuration set in config/application.rb
+  #
+  # Example: To change memory provider for this environment
+  # set
+  #
+  # config.storage_provider = :some_other_provider
 end

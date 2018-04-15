@@ -11,6 +11,7 @@ module Charyf
 
       attr_accessor :session_processor, :storage_provider, :dispatcher, :router
       attr_accessor :enabled_intent_processors
+      attr_accessor :enabled_interfaces
 
       def initialize(root)
 
@@ -40,6 +41,10 @@ module Charyf
 
       def enabled_intent_processors
         (@enabled_intent_processors || []).map(&:to_sym)
+      end
+
+      def enabled_interfaces
+        (@enabled_interfaces || []).map(&:to_sym)
       end
 
       def storage_provider

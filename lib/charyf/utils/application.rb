@@ -87,6 +87,16 @@ module Charyf
       klasses
     end
 
+    def interfaces
+      # TODO resolve dependency on engine - maybe move the base classes to utils?
+      config.enabled_interfaces.map do |interface_name|
+        klass = Charyf::Interface.list[interface_name]
+        raise Charyf::Utils::InvalidConfiguration.new("No interface with name '#{interface_name}' found") unless klass
+
+        klass
+      end
+    end
+
     def dispatcher
       # TODO resolve dependency on engine - maybe move the base classes to utils?
       klass = Charyf::Engine::Dispatcher.list[config.dispatcher]

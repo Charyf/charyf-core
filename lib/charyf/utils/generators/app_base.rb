@@ -255,12 +255,32 @@ module Charyf
         end
       end
 
+      def charyf_command(command)
+        say_status :run, "charyf #{command}"
+
+        _charyf_command = Gem.bin_path("charyf", "charyf")
+
+        require "bundler"
+        Bundler.with_clean_env do
+          full_command = %Q["#{Gem.ruby}" "#{_charyf_command}" #{command}]
+          if options[:quiet]
+            system(full_command, out: File::NULL)
+          else
+            system(full_command)
+          end
+        end
+      end
+
       def bundle_install?
         !(options[:skip_gemfile] || options[:skip_bundle] || options[:pretend])
       end
 
       def run_bundle
         bundle_command("install") if bundle_install?
+      end
+
+      def run_installers
+        charyf_command("generate installers") if bundle_install?
       end
 
       def empty_directory_with_keep_file(destination, config = {})

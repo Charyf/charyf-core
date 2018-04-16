@@ -9,14 +9,15 @@ module Charyf
   module Generators
     include Charyf::Command::Behavior
 
-    REMOVED_GENERATORS = %w(app cli_app intents)
+    REMOVED_GENERATORS = %w(app cli_app skill_hooks installers)
 
 
     DEFAULT_ALIASES = {}
 
     DEFAULT_OPTIONS = {
         charyf: {
-            intents: true
+          # Skill hooks: true => allows automatic call for all hooks when generating new skill
+          skill_hooks: true
         }
     }
 
@@ -95,6 +96,8 @@ module Charyf
         namespaces = public_namespaces
         namespaces.sort!
 
+        hidden_namespaces.each { |n| namespaces.delete(n.to_s) }
+
         groups = Hash.new { |h, k| h[k] = [] }
         namespaces.each do |namespace|
           base = namespace.split(":").first
@@ -104,8 +107,6 @@ module Charyf
         charyf = groups.delete("charyf") || []
         charyf.map! { |n| n.sub(/^charyf:/, "") }
         REMOVED_GENERATORS.map { |name| charyf.delete(name) }
-
-        hidden_namespaces.each { |n| groups.delete(n.to_s) }
 
         [[ "charyf", charyf ]] + groups.sort.to_a
       end

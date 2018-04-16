@@ -14,7 +14,8 @@ module Charyf
 
       require_relative 'generators/app/app_generator'
       require_relative 'generators/skill/skill_generator'
-      require_relative 'generators/intents/intents_generator'
+      require_relative 'generators/skill/hooks_generator'
+      require_relative 'generators/installers/installers_generator'
 
       run_generators_blocks(app)
       self

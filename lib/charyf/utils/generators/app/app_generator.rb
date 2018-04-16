@@ -180,6 +180,8 @@ module Charyf
 
         public_task :run_bundle
 
+        public_task :run_installers
+
         def run_after_bundle_callbacks
           @after_bundle_callbacks.each(&:call)
         end

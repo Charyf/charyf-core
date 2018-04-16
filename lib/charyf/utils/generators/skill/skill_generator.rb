@@ -40,7 +40,7 @@ module Charyf
         empty_directory File.join('app/skills', skill_content_path, 'initializers')
       end
 
-      hook_for :intents
+      hook_for :skill_hooks
 
     end
   end

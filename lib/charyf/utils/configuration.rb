@@ -2,11 +2,21 @@ module Charyf
   module Configuration
 
     class Generators #:nodoc:
-      attr_accessor :options
-      attr_reader :hidden_namespaces
+      attr_reader :hidden_namespaces, :installers, :skill_hooks
+
+      def options
+        dup = @options.dup
+        dup[:charyf] ||= {}
+        dup[:installers] = @installers
+        dup[:skill_hooks] = @skill_hooks
+
+        dup
+      end
 
       def initialize
         @hidden_namespaces = []
+        @installers = []
+        @skill_hooks = []
         @options = Hash.new { |h, k| h[k] = {} }
       end
 

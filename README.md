@@ -22,3 +22,8 @@ To read more about roadmap continue to [Roadmap](https://github.com/Charyf/chary
 To report an issue follow steps in [Reporting an issue](https://github.com/Charyf/charyf-core/wiki/Reporting-an-issue)
 
 Continue to [wiki](https://github.com/Charyf/charyf-core/wiki)
+
+
+***
+
+The development process is currently on hold. The author has to finish his Master's thesis. :)

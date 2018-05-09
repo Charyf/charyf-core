@@ -54,7 +54,6 @@ module Charyf
       }
     end
 
-    sig_self ['Symbol', 'Hash'], ['TrueClass', 'FalseClass'],
     def self.match_action_filters?(name, filters = {only: [], except: []} )
       (filters[:only] == :all && !filters[:except].include?(name)) ||
           ((filters[:only] != :all) && (filters[:only] || []).include?(name))

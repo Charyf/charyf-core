@@ -8,7 +8,6 @@ module Charyf
 
 
       # Module -> anything of type Charyf::Interface::Base
-      # sig ['Module', 'String'], nil,
       def initialize(referer, conversation_id, message_id)
         @referer = referer
         @conversation_id = conversation_id

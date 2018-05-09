@@ -28,7 +28,6 @@ module Charyf
 
       protected
 
-      sig [{text: ['String','NilClass'], render: ['Symbol', 'String', 'NilClass']}], nil,
       def reply(
           text: nil,
           html: nil,

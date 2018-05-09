@@ -30,7 +30,6 @@ module Charyf
 
       end # End of ClassMethods
 
-      # TODO sig
       def response_folder
         return nil if skill.nil?
 
@@ -48,12 +47,10 @@ module Charyf
         end
       end
 
-      # TODO sig
       def responses_for(action)
         Dir[response_folder.join("#{action}**")]
       end
 
-      # TODO sig
       def render_text_response(action)
         file_path = response_folder.join("#{action}.txt.erb")
 
@@ -62,7 +59,6 @@ module Charyf
         _render_sample_response file_path
       end
 
-      # TODO sig
       def render_html_response(action)
         file_path = response_folder.join("#{action}.html.erb")
 
@@ -84,12 +80,10 @@ module Charyf
       end
 
 
-      # TODO sig
       def controller_path
         controller_name.underscore
       end
 
-      # TODO sig
       def exists?(path)
         File.exists?(path)
       end

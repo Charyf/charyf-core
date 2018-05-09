@@ -7,7 +7,6 @@ module Charyf
       attr_reader :uuid, :skill, :controller, :action, :timestamp
 
       # TODO - mention it could return nil
-      # TODO sig
       def self.get(uuid)
         yaml = _storage.get(uuid)
         yaml ? YAML.load(yaml) : nil
@@ -45,7 +44,6 @@ module Charyf
         self.class._storage.store(@uuid, YAML.dump(self))
       end
 
-      sig [], ['Symbol', 'String', 'NilClass'],
       def full_controller_name
         @controller.blank? ? nil : @skill.camelize + '::' + @controller.camelize
       end

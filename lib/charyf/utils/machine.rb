@@ -9,7 +9,6 @@ module Charyf
 
       class << self
 
-        # Sig does not handle blocks
         def state(name, default: false, final: false, action: nil, &block)
           if default
             raise DefaultExists.new if @_default_state

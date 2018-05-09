@@ -64,7 +64,6 @@ module Charyf
       instance_eval(&block)
     end
 
-    # TODO sig, nullable
     def session_processor
       # TODO resolve dependency on engine - maybe move the base classes to utils?
       klass = Charyf::Engine::Session::Processor.list[config.session_processor]
@@ -105,7 +104,6 @@ module Charyf
       klass
     end
 
-    # TODO sig, nullable
     def storage_provider
       klass = Charyf::Utils::StorageProvider.list[config.storage_provider]
       raise Charyf::Utils::InvalidConfiguration.new("No storage provider with name '#{config.storage_provider}' found") unless klass

@@ -63,7 +63,6 @@ module Charyf
           self.class.routes
         end
 
-        sig ['Charyf::Engine::Context'], nil,
         def spawn_controller(context)
 
           Charyf.logger.flow_request("[FLOW] Dispatching request [#{context.request.inspect}]" +

@@ -16,8 +16,8 @@ module Charyf
 
       module ClassMethods
 
-        def auto_reply(only: [], except: [])
-          @_render_filters = Charyf::Utils.create_action_filters(only, except)
+        def auto_reply(on_all = nil, only: [], except: [])
+          @_render_filters = Charyf::Utils.create_action_filters(on_all, only, except)
         end
 
         def _render_on?(action)

@@ -26,7 +26,7 @@ module Charyf
       end
 
       sig_self ['String', 'Charyf::Engine::Response'], nil,
-      def self.reply(conversation_id, response)
+      def self.reply(conversation_id, message_id, response)
         interface = _interfaces[conversation_id]
         raise InvalidConversationError.new("No program interface found for conversation #{conversation_id}") unless interface
 

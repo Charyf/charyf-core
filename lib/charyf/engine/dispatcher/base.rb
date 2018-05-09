@@ -78,6 +78,7 @@ module Charyf
             result = controller.send(get_action_name(context))
             handle_after_actions(controller)
 
+            # TODO collect all replies
             return :OK, result
           rescue Exception => e
             # Dispatch the error to all error handlers

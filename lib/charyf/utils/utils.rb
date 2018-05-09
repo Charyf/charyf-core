@@ -38,13 +38,14 @@ module Charyf
       end
     end
 
-    sig_self [['Symbol', 'Array'], 'Array'], 'Hash',
-    def self.create_action_filters(only = [], except = [])
+    def self.create_action_filters(on_all = nil, only = [], except = [])
       if only && only != :all && !only.empty? && except && !except.empty?
         raise InvalidDefinitionError.new("Define only or except, don't define both");
       end
 
       _only = except && except.empty? ? only.map(&:to_sym) : :all
+
+      _only = :all if on_all == :all
       _except = except.map(&:to_sym)
 
       {

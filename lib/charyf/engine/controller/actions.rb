@@ -10,8 +10,8 @@ module Charyf
 
       module ClassMethods
 
-        def before_action(method_name, only: [], except: [])
-          (@_before_actions ||= {})[method_name] = Charyf::Utils.create_action_filters(only, except)
+        def before_action(method_name, on_all = nil, only: [], except: [])
+          (@_before_actions ||= {})[method_name] = Charyf::Utils.create_action_filters(on_all, only, except)
         end
 
         def _before_actions(action)

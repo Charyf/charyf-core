@@ -53,7 +53,9 @@ module Charyf
                                     " with [#{response.inspect}]"
         )
 
-        request.referer.reply(conversation_id, response)
+        request.referer.reply(conversation_id, request.message_id, response)
+
+        return response
       end
 
       def conversation_id
